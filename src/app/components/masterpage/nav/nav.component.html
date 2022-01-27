@@ -1,0 +1,27 @@
+<p-menubar [model]="navMenu" *ngIf="isDesktop$ | async; else mobileTemplate">
+  <div>
+    <ng-container *ngIf="hasUpdate$ | async as hasUpdate">
+      <button pButton type="button" icon="fas fa-exclamation-triangle" label="Update Available"
+        (click)="updateApp()"></button>
+    </ng-container>
+    <p-slideMenu #menu [model]="utilityMenu" [popup]="true" [viewportHeight]="utilityMenu.length * 65"></p-slideMenu>
+    <a label="Show" (click)="menu.toggle($event)">
+      <i class="fas fa-user me-2"></i> <span class="me-2">{{ userName }}</span>
+      <i class="fas fa-caret-down me-1"></i>
+    </a>
+  </div>
+</p-menubar>
+
+<ng-template #mobileTemplate>
+  <div class="pt-2 float-end">
+    <a (click)="sidebarVisible = true" class="p-2">
+      <i class="fas fa-bars fa-lg me-2"></i>
+    </a>
+  </div>
+</ng-template>
+
+<p-sidebar [(visible)]="sidebarVisible">
+  <p-menu [model]="navMenu"></p-menu>
+  <hr />
+  <p-menu [model]="utilityMenu"></p-menu>
+</p-sidebar>

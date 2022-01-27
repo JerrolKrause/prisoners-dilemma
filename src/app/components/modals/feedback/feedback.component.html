@@ -1,0 +1,24 @@
+<p>Found a bug or would like to request a new feature? Let us know!</p>
+<form>
+  <textarea matInput placeholder="Leave a comment" rows="4"></textarea>
+</form>
+
+<div class="p-dialog-footer p-widget-content ng-tns-c7-3 ng-star-inserted">
+  <!-- (click)="ref.close()" -->
+  <button type="button" pButton class="float-start pull-left" aria-label="Close" (click)="ref.close()"
+    icon="fas fa-times" label="Cancel"></button>
+  <button type="button" pButton (click)="submit()" icon="fas fa-angle-double-right" iconPos="right"
+    label="Send feedback"></button>
+</div>
+
+<!--
+<div class="modal-footer" style="justify-content: space-between;">
+  <button type="button" mat-button class="float-start pull-left dismiss" mat-dialog-close>
+    <i class="fas fa-times" aria-hidden="true"></i> Close
+  </button>
+  <button type="button" mat-button class="mat-reverse" (click)="submit()" aria-label="Close">
+    <i class="far fa-comments" aria-hidden="true"></i> Send feedback
+  </button>
+</div>
+
+-->

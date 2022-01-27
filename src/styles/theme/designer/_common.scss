@@ -1,0 +1,58 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    .p-widget {
+        font-family: $fontFamily;
+        font-size: $fontSize;
+        text-decoration: none;
+    }
+    
+    .p-corner-all {
+        @include border-radius($borderRadius);
+    }
+
+    .p-corner-top {
+        @include border-radius-top($borderRadius);
+    }
+
+    .p-corner-bottom {
+        @include border-radius-bottom($borderRadius);
+    }
+
+    .p-corner-left {
+        @include border-radius-left($borderRadius);
+    }
+
+    .p-corner-right {
+        @include border-radius-right($borderRadius);
+    }
+
+    a {
+        color: $linkColor;
+        text-decoration: none;
+
+        &:hover {
+            color: $linkHoverColor;
+        }
+
+        &:active {
+            color: $linkActiveColor;
+        }
+    }
+
+    .p-helper-reset {
+        line-height: normal;
+    }
+
+    .p-state-disabled, .p-widget:disabled {
+        @include opacity($disabledOpacity);
+    }
+
+    .pi {
+        font-size: $primeIconFontSize;
+    }
+}

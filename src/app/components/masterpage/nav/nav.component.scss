@@ -1,0 +1,26 @@
+// @import '../../../../styles/globals/variables';
+
+.nav-component {
+  .p-menubar {
+    border: 0;
+    border-radius: 0;
+  }
+  .p-menubar-custom {
+    padding-top: 0.75em;
+    a {
+      padding: 0.714em 0.857em;
+    }
+  }
+  .p-button.p-button-text-icon-left .p-button-text {
+    padding: 0.25em 1em 0.25em 2em;
+  }
+  // Mobile flyout menu
+  .p-menu {
+    border: 0;
+    width: 100%;
+    padding-top: 2rem;
+  }
+  .p-state-active {
+    background-color: #eaeaea;
+  }
+}

@@ -1,0 +1,83 @@
+body {
+    .p-progressbar {
+        border: $progressBarBorder;
+        height: $progressBarHeight;
+        background-color: $progressBarBgColor;
+        
+        .p-progressbar-value {
+            border: 0 none;
+            margin: 0;
+            background: $progressBarValueBgColor;
+        }
+        
+        .p-progressbar-label {
+            margin-top: 0;
+            color: $textColor;
+            line-height: $progressBarHeight;
+        }
+    }
+
+    .p-galleria {
+        .p-galleria-nav-prev,
+        .p-galleria-nav-next {
+            @include transition(all $transitionDuration);
+            position: absolute;
+            color: $textSecondaryColor;
+            
+            &:hover {
+                @include scale(1.2);
+            }
+        }
+
+        .p-galleria-nav-prev {
+            font-size: $fontSize + 2;
+        }
+
+        .p-galleria-nav-next {
+            font-size: $fontSize + 2;
+        }
+    }
+    
+    .p-terminal {
+        background-color: $panelContentBgColor;
+        color: $panelContentTextColor;
+        border: $panelContentBorder;
+        padding: $panelContentPadding;
+
+        .p-terminal-input {
+            font-size: $fontSize;
+            font-family: $fontFamily;
+            height: $fontSize + 2;
+        }
+
+        .p-terminal-command {
+            height: $fontSize + 2;
+        }
+    }
+
+    .p-inplace {
+        min-height: 2.357em;
+
+        .p-inplace-display {
+            padding: $inplacePadding;
+            @include border-radius($borderRadius);
+            @include transition($inplaceTransition);
+
+            &:not(.p-state-disabled):hover {
+                background-color: $inplaceHoverBgColor;
+                color: $inplaceHoverTextColor;
+            }
+        }
+    }
+
+    .p-fluid {
+        .p-inplace {
+            &.p-inplace-closable {
+                .p-inplace-content > :first-child {
+                    display: inline-block;
+                    width: calc(100% - #{$buttonIconOnlyWidth});
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,42 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/browser",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2017",
+    "module": "es2020",
+    "lib": ["es2020", "dom"],
+    "types": ["node"],
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "$libs": ["./src/app/libs"],
+      "$site": ["./src/app/site.module"],
+      "$ui": ["./src/app/shared/stores/ui"],
+      "$domain": ["./src/app/shared/stores/domain"],
+      "$settings": ["./src/app/shared/stores/settings"],
+      "$utils": ["./src/app/shared/utils"],
+      "$env": ["./src/environments/environment.ts"],
+      "$models": ["./src/shared/models"],
+      "$modals": ["./src/compoments/modals"]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}
