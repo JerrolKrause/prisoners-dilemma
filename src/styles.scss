@@ -2,16 +2,16 @@
 
 // Bootstrap
 // Option 1: Import only parts of Bootstrap
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/root';
-@import '~bootstrap/scss/reboot';
-@import '~bootstrap/scss/utilities';
-@import '~bootstrap/scss/tables';
-@import '~bootstrap/scss/grid';
+// @import '~bootstrap/scss/functions';
+// @import '~bootstrap/scss/variables';
+// @import '~bootstrap/scss/mixins';
+// @import '~bootstrap/scss/root';
+// @import '~bootstrap/scss/reboot';
+// @import '~bootstrap/scss/utilities';
+// @import '~bootstrap/scss/tables';
+// @import '~bootstrap/scss/grid';
 // Option 2: Import all of Bootstrap
-// @import '~bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/bootstrap';
 
 // Font Awesome Free 5
 @import '~@fortawesome/fontawesome-free/css/all.css';

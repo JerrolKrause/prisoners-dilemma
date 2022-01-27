@@ -32,3 +32,9 @@ $easeInOutBack: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 /* If loading scss files from the assets dir, this is the path */
 // $asset-slug: ''; // For root
 $asset-slug: '/angular-starter'; // For subdirs
+
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+$xxl: 1400px;

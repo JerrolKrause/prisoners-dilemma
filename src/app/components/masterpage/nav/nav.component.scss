@@ -1,4 +1,4 @@
-// @import '../../../../styles/globals/variables';
+@import '../../../../styles/_globals';
 
 .nav-component {
   .p-menubar {
@@ -22,5 +22,21 @@
   }
   .p-state-active {
     background-color: #eaeaea;
+  }
+}
+
+.mobile-menu {
+  display: block;
+
+  @include lg-up() {
+    display: none;
+  }
+}
+
+.main-menu {
+  display: none;
+
+  @include lg-up() {
+    display: block;
   }
 }
