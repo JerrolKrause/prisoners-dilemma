@@ -20,6 +20,11 @@ $bg-primary-dk: $brand-primary-dk;
 
 $grey: #eff3f6;
 
+$colors: (
+  primary: $brand-primary,
+  interact: $interact-primary,
+);
+
 // Easing Animations
 // https://matthewlein.com/tools/ceaser
 // USAGE:  .anim{ transition: 0.7s $easeInOutBack; }
@@ -38,3 +43,11 @@ $md: 768px;
 $lg: 992px;
 $xl: 1200px;
 $xxl: 1400px;
+
+$breakpoints: (
+  small: $sm,
+  medium: $md,
+  large: $lg,
+  extra-large: $xl,
+  extra-extra-large: $xxl,
+);

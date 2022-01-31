@@ -1,2 +1,13 @@
 @import 'globals/variables';
 @import 'globals/mixins';
+
+@mixin convert($list) {
+  @each $name, $value in $list {
+    --nts-#{$name}: #{$value};
+  }
+}
+
+:root {
+  @include convert($breakpoints);
+  @include convert($colors);
+}

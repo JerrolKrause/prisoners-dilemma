@@ -20,7 +20,7 @@
             "polyfills": "./src/polyfills.ts",
             "assets": ["./src/assets", "./src/favicon.ico", "./src/apple-touch-icon.png", "./src/safari-pinned-tab.svg", "./src/manifest.webmanifest"],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/styles"]
+              "includePaths": ["src/styles/globals"]
             },
             "styles": ["./src/styles.scss"],
             "scripts": [
