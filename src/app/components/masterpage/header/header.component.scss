@@ -1,4 +1,8 @@
-@import '../../../../styles/globals/variables';
+@import '_globals';
+
+:host {
+  display: block;
+}
 
 header {
   background: #fff;

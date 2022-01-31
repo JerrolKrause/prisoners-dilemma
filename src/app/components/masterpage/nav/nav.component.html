@@ -2,7 +2,7 @@
   <ng-container *ngIf="hasUpdate$ | async as hasUpdate">
     <button pButton type="button" icon="fas fa-exclamation-triangle" label="Update Available" (click)="updateApp()"></button>
   </ng-container>
-  <p-slideMenu #menu [model]="utilityMenu" [popup]="true" [viewportHeight]="utilityMenu.length * 65"></p-slideMenu>
+  <p-slideMenu #menu [model]="utilityMenu" [popup]="true" [viewportHeight]="utilityMenu.length * 70"></p-slideMenu>
   <a label="Show" (click)="menu.toggle($event)">
     <i class="fas fa-user me-2"></i> <span class="me-2">{{ userName }}</span>
     <i class="fas fa-caret-down me-1"></i>

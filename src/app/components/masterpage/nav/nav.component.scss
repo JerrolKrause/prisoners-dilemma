@@ -1,4 +1,8 @@
-@import '../../../../styles/_globals';
+@import '_globals';
+
+:host {
+  display: block;
+}
 
 .nav-component {
   .p-menubar {
