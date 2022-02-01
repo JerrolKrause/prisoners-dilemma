@@ -1,5 +1,3 @@
-@import '_globals';
-
 :host {
   display: block;
 }
@@ -10,7 +8,7 @@ header {
   margin-bottom: 1rem;
   .logo {
     text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.3);
-    color: $interact-primary;
+    color: var(--nts-interact);
   }
   .brand {
     display: inline-block;
