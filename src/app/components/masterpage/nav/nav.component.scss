@@ -6,6 +6,16 @@
 }
 
 .nav-component {
+  // Fix dropdown menu
+  .p-slidemenu {
+    .p-slidemenu-content {
+      height: initial !important;
+      overflow: initial !important;
+    }
+    .p-slidemenu-rootlist {
+      position: initial !important;
+    }
+  }
   .p-menubar {
     border: 0;
     border-radius: 0;
@@ -23,7 +33,6 @@
   .p-menu {
     border: 0;
     width: 100%;
-    padding-top: 2rem;
   }
   .p-state-active {
     background-color: #eaeaea;

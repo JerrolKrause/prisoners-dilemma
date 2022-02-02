@@ -14,16 +14,12 @@ import { HeaderComponent } from './masterpage/header/header.component';
 import { LayoutMainComponent } from './masterpage/main/layout-main.component';
 import { LayoutSingleComponent } from './masterpage/single/layout-single.component';
 import { NavComponent } from './masterpage/nav/nav.component';
-import { NavSearchComponent } from './masterpage/nav/search/nav-search.component';
-
-
-
 
 // Modals include
 const APP_MODALS = [LogoutModalComponent, FeedbackModalComponent];
 
 // Components to include
-export const APP_COMPONENTS = [...APP_MODALS, FooterComponent, HeaderComponent, LayoutMainComponent, LayoutSingleComponent, NavComponent, NavSearchComponent];
+export const APP_COMPONENTS = [...APP_MODALS, FooterComponent, HeaderComponent, LayoutMainComponent, LayoutSingleComponent, NavComponent];
 
 @NgModule({
   imports: [
@@ -39,4 +35,4 @@ export const APP_COMPONENTS = [...APP_MODALS, FooterComponent, HeaderComponent, 
   exports: [APP_COMPONENTS],
   entryComponents: [APP_MODALS],
 })
-export class ComponentsModule { }
+export class ComponentsModule {}

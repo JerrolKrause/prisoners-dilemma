@@ -4,7 +4,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, ErrorHandler, Injector } from '@angular/core'; // APP_INITIALIZER,
 import { RouterModule, PreloadAllModules, NoPreloading } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { enableAkitaProdMode, persistState } from '@datorama/akita';
 
 import { SiteModule } from '$site';
 import { NoContentComponent } from './routes/no-content/no-content.component';
@@ -15,46 +14,6 @@ import { HttpInterceptorService } from './shared/interceptors/http.interceptor';
 import { AppComponent } from './app.component';
 import { ROUTES } from './app.routes';
 import { environment } from '$env';
-import { StringUtils } from '$utils';
-
-// Set Akita to work in prod mode in prod
-if (environment.production) {
-  enableAkitaProdMode();
-}
-
-/**
- * Tell Akita to persist state with the following options
- * Currently only set up with global UI State
- */
-persistState({
-  storage: localStorage, // Session storage or local storage
-  key: 'appState', // Property to set state under
-  include: ['uiState', 'settings'], // Which stores to include
-  // Obfuscate the app state
-  serialize: (entity: JSON) => {
-    let str = JSON.stringify(entity);
-    str = StringUtils.pad(str, 75, 75);
-    str = StringUtils.obfuscateAdd(str);
-    str = StringUtils.charShift(str, 10);
-    return str;
-  },
-  // De-obfuscate the app state
-  deserialize: (str: string) => {
-    // Handle initial state
-    if (str === '{}') {
-      return {};
-    }
-    try {
-      str = StringUtils.charShift(str, -10);
-      str = StringUtils.obfuscateRemove(str);
-      str = StringUtils.trim(str, 75, 75);
-      return JSON.parse(str);
-    } catch (err) {
-      console.error(err);
-      return {};
-    }
-  },
-});
 
 // Enables faster prod mode, does disable some dirty error checking though
 // enableProdMode();

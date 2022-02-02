@@ -4,7 +4,7 @@
   </ng-container>
   <p-slideMenu #menu [model]="utilityMenu" [popup]="true" [viewportHeight]="utilityMenu.length * 70"></p-slideMenu>
   <a label="Show" (click)="menu.toggle($event)">
-    <i class="fas fa-user me-2"></i> <span class="me-2">{{ userName }}</span>
+    <i class="fas fa-user me-2"></i> <span class="me-2">{{ userName$ | async }}</span>
     <i class="fas fa-caret-down me-1"></i>
   </a>
 </p-menubar>
