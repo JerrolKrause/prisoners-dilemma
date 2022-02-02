@@ -5,22 +5,22 @@ A rapid starter project for creating Angular single page apps. Contains Angular,
 ## Quick Start
 
 ```bash
-# Download the latest version of the starter from
-https://github.com/ntersol/angular-starter/archive/refs/heads/dev/nx.zip
+# Open a terminal/command and navigate to the directory where the starter is needed
 
-# Unzip the file locally
+# Clone the latest
+git clone https://github.com/ntersol/angular-starter.git
 
-# Navigate to the apps/angular-starter directory
+# Rename the directory
+ren angular-starter MY_APP_NAME
 
-# Copy/paste the contents of this directory to wherever you need them to go
-
-# Open a command prompt, cd into the directory where you placed the files
-
-# Localize
-Run `npm run localize`
+# Navigate into the newly renamed directory
+cd MY_APP_NAME
 
 # Install the repo with npm
 npm i
+
+# Start the app
+ng serve
 ```
 
 ## Usage
