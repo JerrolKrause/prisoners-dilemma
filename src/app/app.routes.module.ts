@@ -1,4 +1,6 @@
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { NoPreloading, PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { environment } from '../environments/environment';
 import { LayoutMainComponent } from './components/masterpage';
 import { NoContentComponent } from './routes/no-content/no-content.component';
 import { AuthGuard } from './shared/guards/auth.guard';
@@ -64,3 +66,15 @@ export const ROUTES: Routes = [
     ],
   },
 ];
+@NgModule({
+  imports: [
+    RouterModule.forRoot(ROUTES, {
+      useHash: !environment.production,
+      preloadingStrategy: environment.settings.preloadRoutes ? PreloadAllModules : NoPreloading,
+      scrollPositionRestoration: 'enabled',
+      relativeLinkResolution: 'legacy',
+    }),
+  ],
+  exports: [RouterModule],
+})
+export class AppRouterModule {}

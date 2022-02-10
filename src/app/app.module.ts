@@ -1,19 +1,15 @@
 // @angular modules
+import { SiteModule } from '$site';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ErrorHandler, Injector, NgModule } from '@angular/core'; // APP_INITIALIZER,
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, ErrorHandler, Injector } from '@angular/core'; // APP_INITIALIZER,
-import { RouterModule, PreloadAllModules, NoPreloading } from '@angular/router';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
-import { SiteModule } from '$site';
+// Main entrypoint component
+import { AppComponent } from './app.component';
+import { AppRouterModule } from './app.routes.module';
 import { NoContentComponent } from './routes/no-content/no-content.component';
 import { GlobalErrorHandler } from './shared/interceptors/error.interceptor';
 import { HttpInterceptorService } from './shared/interceptors/http.interceptor';
-
-// Main entrypoint component
-import { AppComponent } from './app.component';
-import { ROUTES } from './app.routes';
-import { environment } from '$env';
 
 // Enables faster prod mode, does disable some dirty error checking though
 // enableProdMode();
@@ -33,12 +29,7 @@ export let InjectorInstance: Injector;
     BrowserModule.withServerTransition({ appId: 'angular-starter' }),
     HttpClientModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(ROUTES, {
-      useHash: !environment.production,
-      preloadingStrategy: environment.settings.preloadRoutes ? PreloadAllModules : NoPreloading,
-      scrollPositionRestoration: 'enabled',
-      relativeLinkResolution: 'legacy',
-    }),
+    AppRouterModule,
 
     /** Uncomment to enable SW
     ServiceWorkerModule.register('ngsw-worker.js', {
