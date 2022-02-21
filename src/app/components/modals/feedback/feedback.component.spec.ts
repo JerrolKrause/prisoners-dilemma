@@ -1,19 +1,22 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FeedbackModalComponent } from './feedback.component';
 
-import { CallListenComponent } from './call-listen.component';
+describe('FeedbackModalComponent', () => {
+  let component: FeedbackModalComponent;
+  let fixture: ComponentFixture<FeedbackModalComponent>;
 
-describe('CallListenComponent', () => {
-  let component: CallListenComponent;
-  let fixture: ComponentFixture<CallListenComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [CallListenComponent],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [FeedbackModalComponent],
+        providers: [DynamicDialogRef],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CallListenComponent);
+    fixture = TestBed.createComponent(FeedbackModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

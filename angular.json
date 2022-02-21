@@ -127,23 +127,17 @@
             "browserTarget": "angular-starter:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "./src/test.ts",
-            "karmaConfig": "./src/karma.conf.js",
-            "polyfills": "./src/polyfills.ts",
-            "tsConfig": "./src/tsconfig.spec.json",
-            "scripts": [],
-            "styles": ["./src/styles.scss"],
-            "assets": ["./src/assets", "./src/favicon.ico", "./src/apple-touch-icon.png", "./src/safari-pinned-tab.svg", "./src/manifest.webmanifest"]
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["./src/tsconfig.app.json", "./src/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "tsConfig": "./src/tsconfig.spec.json"
           }
         },
         "server": {
@@ -199,6 +193,7 @@
   },
 
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "defaultCollection": "@ntersol/schematics"
   }
 }
