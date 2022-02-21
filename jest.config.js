@@ -4,6 +4,7 @@ const { compilerOptions } = require('./tsconfig.json');
 module.exports = {
   displayName: 'angular-starter',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  collectCoverage: true,
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
