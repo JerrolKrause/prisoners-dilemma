@@ -11,6 +11,5 @@ export class ApiService {
   public users = this.store<Models.User>({ uniqueId: 'id', apiUrl: '//jsonplaceholder.typicode.com/users' });
 
   // List all store services here
-  constructor(public http: HttpClient) { }
-
+  constructor(public http: HttpClient) {}
 }

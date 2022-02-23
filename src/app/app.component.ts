@@ -18,8 +18,8 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private title: Title,
     private version: NtsVersionManagementService,
-    // private sw: NtsServiceWorkerService,
-  ) { }
+  ) // private sw: NtsServiceWorkerService,
+  {}
 
   ngOnInit() {
     this.routeChange();

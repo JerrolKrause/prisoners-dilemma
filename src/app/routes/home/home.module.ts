@@ -15,11 +15,8 @@ import { HomeComponent } from './home.component';
 @NgModule({
   imports: [CommonModule, SiteModule, routing],
   declarations: [HomeComponent],
-  providers: [
-    RouteUiService,
-    RouteApiService,
-  ],
+  providers: [RouteUiService, RouteApiService],
   exports: [],
   entryComponents: [],
 })
-export class HomeModule { }
+export class HomeModule {}

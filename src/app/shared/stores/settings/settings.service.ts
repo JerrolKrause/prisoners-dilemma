@@ -9,12 +9,11 @@ interface SettingsStore {
 
 const initialState: SettingsStore = {
   token: null,
-  userName: null
-}
+  userName: null,
+};
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
-
   // Create a ui store creator instance with default state using interface model and options
   private store = ntsUIStoreCreator<SettingsStore>(initialState, { persistId: 'settingsStore' });
 
@@ -41,10 +40,5 @@ export class SettingsService {
     this.store.update({ userName: userName });
   }
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-  ) {
-
-  }
-
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 }

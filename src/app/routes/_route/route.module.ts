@@ -5,8 +5,8 @@ import { SiteModule } from '$site'; // Site modules
 // Routing
 import { routing } from './routes';
 
-import { RouteApiService } from './shared/stores/route-api-store.service'
-import { RouteUiService } from './shared/stores/route-ui-store.service'
+import { RouteApiService } from './shared/stores/route-api-store.service';
+import { RouteUiService } from './shared/stores/route-ui-store.service';
 
 // Components
 import { RouteComponent } from './_route.component';
@@ -17,9 +17,9 @@ import { RouteComponent } from './_route.component';
   providers: [
     // Not provided in root since route specific
     RouteApiService,
-    RouteUiService
+    RouteUiService,
   ],
   exports: [],
   entryComponents: [],
 })
-export class RouteModule { }
+export class RouteModule {}

@@ -51,9 +51,8 @@ export module Models {
   export enum Color {
     red,
     blue,
-    orange
+    orange,
   }
-
 
   /********************************
    *  BEGIN NSWAG STUDIO COPY/PASTE
@@ -63,7 +62,7 @@ export module Models {
    *  END NSWAG STUDIO COPY/PASTE
    ********************************/
 
-    /********************************
+  /********************************
    *  BEGIN EXTENDS NSWAG
    ********************************/
 

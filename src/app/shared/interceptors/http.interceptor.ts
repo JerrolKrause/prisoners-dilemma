@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpEvent,
-  HttpInterceptor,
-  HttpHandler,
-  HttpRequest,
-  HttpHeaders,
-} from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { SettingsService } from '$settings';
@@ -19,10 +13,7 @@ export class HttpInterceptorService implements HttpInterceptor {
    */
   constructor(private settings: SettingsService, private auth: AuthService) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler,
-  ): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Add any custom headers
     const headersObj: { [keys: string]: string } = {};
     // If token present, add bearer token
@@ -34,14 +25,16 @@ export class HttpInterceptorService implements HttpInterceptor {
     // Clone request, add headers
     const cloneReq = next.handle(req.clone({ headers }));
     // Return request, handle errors globally here
-    return cloneReq.pipe(catchError(error => {
-      // If forbidden error, end session
-      if (error.status === 401 || error.status === 403) {
-        this.sessionEnd();
-      }
-      // Catch and rethrow error
-      return throwError(error);
-    }) as any);
+    return cloneReq.pipe(
+      catchError(error => {
+        // If forbidden error, end session
+        if (error.status === 401 || error.status === 403) {
+          this.sessionEnd();
+        }
+        // Catch and rethrow error
+        return throwError(error);
+      }) as any,
+    );
   }
 
   /**

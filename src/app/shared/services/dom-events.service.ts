@@ -97,11 +97,7 @@ export class NtsKeyboardEventsService {
 
     let keepListeners = true;
     Object.keys(listenersActive).forEach(key => {
-      if (
-        listenersActive[key] &&
-        listenersActive[key].observers &&
-        listenersActive[key].observers.length === 0
-      ) {
+      if (listenersActive[key] && listenersActive[key].observers && listenersActive[key].observers.length === 0) {
         keepListeners = false;
       }
     });
@@ -118,9 +114,7 @@ export class NtsKeyboardEventsService {
    */
   private removeUnused(keysState: Keys): Keys {
     const keysStateNew = { ...keysState };
-    Object.keys(keysStateNew).forEach(key =>
-      !keysStateNew[key] ? delete keysStateNew[key] : null,
-    );
+    Object.keys(keysStateNew).forEach(key => (!keysStateNew[key] ? delete keysStateNew[key] : null));
     return keysStateNew;
   }
 }

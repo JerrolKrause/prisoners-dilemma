@@ -1,12 +1,9 @@
 <p>
   Your session is about to expire in
-  <span id="the_time">{{ counter }}</span> seconds, do you want to continue
-  working?
+  <span id="the_time">{{ counter }}</span> seconds, do you want to continue working?
 </p>
 
 <div class="p-dialog-footer p-widget-content ng-tns-c7-3 ng-star-inserted">
-  <button type="button" pButton class="float-start pull-left" aria-label="Close" (click)="logout()"
-    icon="fas fa-power-off" label="Log Out"></button>
-  <button type="button" pButton (click)="ref.close()" icon="fas fa-angle-double-right" iconPos="right"
-    label="Continue Working"></button>
+  <button type="button" pButton class="float-start pull-left" aria-label="Close" (click)="logout()" icon="fas fa-power-off" label="Log Out"></button>
+  <button type="button" pButton (click)="ref.close()" icon="fas fa-angle-double-right" iconPos="right" label="Continue Working"></button>
 </div>

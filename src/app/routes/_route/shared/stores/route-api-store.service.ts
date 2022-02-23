@@ -9,12 +9,11 @@ import { ntsApiStoreCreator } from '@ntersol/state-management';
  */
 @Injectable()
 export class RouteApiService {
+  // Create a curried store creator instance with default settings
+  private store = ntsApiStoreCreator(this.http, { apiUrlBase: '//jsonplaceholder.typicode.com' });
 
-    // Create a curried store creator instance with default settings
-    private store = ntsApiStoreCreator(this.http, { apiUrlBase: '//jsonplaceholder.typicode.com' });
+  // Create an instance of an entity based store
+  public users = this.store<any>({ apiUrl: '/users' });
 
-    // Create an instance of an entity based store
-    public users = this.store<any>({ apiUrl: '/users' });
-
-    constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient) {}
 }

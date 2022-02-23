@@ -1,1 +1,1 @@
-export * from './global-api-store.service'
+export * from './global-api-store.service';

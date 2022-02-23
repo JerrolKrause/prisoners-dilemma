@@ -16,12 +16,11 @@ interface UIStoreModel {
  */
 @Injectable()
 export class RouteUiService {
-
   // Create a ui store creator instance with default state using interface model and options
   public uiStore = ntsUIStoreCreator<UIStoreModel>({ name: null, user: { age: 12, nameFirst: 'NameFirst123' } }, { persistId: 'uiStore' });
 
   // Get the name slice of state as an observable
   public name$ = this.uiStore.select$('name');
 
-  constructor() { }
+  constructor() {}
 }
