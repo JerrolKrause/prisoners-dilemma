@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/angular-starter",
+    "outDir": "./dist/browser",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
@@ -20,8 +20,10 @@
     "lib": ["es2020", "dom"],
     "typeRoots": ["node_modules/@types"],
     "paths": {
+      "$libs": ["./src/app/libs"],
       "$site": ["./src/app/site.module"],
       "$ui": ["./src/app/shared/stores/ui"],
+      "$domain": ["./src/app/shared/stores/domain"],
       "$settings": ["./src/app/shared/stores/settings"],
       "$utils": ["./src/app/shared/utils"],
       "$env": ["./src/environments/environment.ts"],
