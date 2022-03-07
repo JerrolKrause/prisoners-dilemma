@@ -32,7 +32,9 @@
     "serve:ssr": "node dist/server",
     "build:client-and-server-bundles": "ng build --prod && ng run angular-starter:server",
     "webpack:server": "webpack --config webpack.server.config.js --progress --colors",
-    "build-ie-polyfills": "webpack-cli src/polyfills-ie.ts -o src/assets/scripts/polyfills-ie.min.js -c webpack-polyfill.config.js"
+    "build-ie-polyfills": "webpack-cli src/polyfills-ie.ts -o src/assets/scripts/polyfills-ie.min.js -c webpack-polyfill.config.js",
+    "scully": "npx scully --",
+    "scully:serve": "npx scully serve --"
   },
   "prettier": {
     "tabWidth": 2,
@@ -55,7 +57,7 @@
     "@angular/forms": "^13.2.0",
     "@angular/platform-browser": "^13.2.0",
     "@angular/platform-browser-dynamic": "^13.2.0",
-    "@angular/platform-server": "^13.2.0",
+    "@angular/platform-server": "^13.2.5",
     "@angular/router": "^13.2.0",
     "@angular/service-worker": "^13.2.0",
     "@fortawesome/fontawesome-free": "5.15.4",
@@ -63,6 +65,10 @@
     "@ntersol/schematics": "0.0.70",
     "@ntersol/state-management": "1.0.6",
     "@schematics/update": "^0.1102.18",
+    "@scullyio/init": "^2.1.21",
+    "@scullyio/ng-lib": "^2.1.0",
+    "@scullyio/platform-server": "^2.1.21",
+    "@scullyio/scully": "^2.1.0",
     "bootstrap": "5.1.3",
     "core-js": "3.20.3",
     "document-register-element": "1.14.10",

@@ -10,6 +10,7 @@ import { AppRouterModule } from './app.routes.module';
 import { NoContentComponent } from './routes/no-content/no-content.component';
 import { GlobalErrorHandler } from './shared/interceptors/error.interceptor';
 import { HttpInterceptorService } from './shared/interceptors/http.interceptor';
+import { ScullyLibModule } from '@scullyio/ng-lib';
 
 // Enables faster prod mode, does disable some dirty error checking though
 // enableProdMode();
@@ -39,6 +40,7 @@ export let InjectorInstance: Injector;
      */
 
     SiteModule,
+      ScullyLibModule,
   ],
   providers: [
     // AppConfigService, // App config/env settings
