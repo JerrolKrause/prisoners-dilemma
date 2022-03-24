@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { DialogModule } from 'primeng/dialog';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { SlideMenuModule } from 'primeng/slidemenu';
@@ -11,8 +12,15 @@ import { SidebarModule } from 'primeng/sidebar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ConfirmationService } from 'primeng/api';
+import { FontsModule } from './shared/fonts/fonts.module';
 
-const modules = [
+const MODULES = [
+  // Angular
+  RouterModule,
+  FormsModule,
+  ReactiveFormsModule,
+  // Font-awesome icons
+  FontsModule,
   // Prime NG UI Lib
   SlideMenuModule,
   MenubarModule,
@@ -21,19 +29,13 @@ const modules = [
   DialogModule,
   ConfirmDialogModule,
   DynamicDialogModule,
+  OverlayPanelModule,
 ];
 
 @NgModule({
-  imports: [
-    // Angular
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ...modules,
-  ],
+  imports: [CommonModule, ...MODULES],
   providers: [ConfirmationService, DialogService],
-  exports: [RouterModule, FormsModule, ReactiveFormsModule, ...modules],
+  exports: MODULES,
   declarations: [],
 })
 export class VendorModule {}

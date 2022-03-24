@@ -3,7 +3,7 @@ import { SiteModule } from '$site';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorHandler, Injector, NgModule } from '@angular/core'; // APP_INITIALIZER,
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Main entrypoint component
 import { AppComponent } from './app.component';
 import { AppRouterModule } from './app.routes.module';
@@ -28,7 +28,7 @@ export let InjectorInstance: Injector;
   imports: [
     BrowserModule.withServerTransition({ appId: 'angular-starter' }),
     HttpClientModule,
-    BrowserAnimationsModule,
+    // BrowserAnimationsModule,
     AppRouterModule,
 
     /** Uncomment to enable SW

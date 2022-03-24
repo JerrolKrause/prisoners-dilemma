@@ -1,14 +1,14 @@
 <app-header></app-header>
 
-<div class="container mt-3">
+<div class="container mt-5">
   <div class="m-auto" style="max-width: 480px">
     <form [formGroup]="formMain" novalidate (ngSubmit)="onLogin()">
-      <h1 class="title"><i class="fas fa-user"></i> Please sign in</h1>
+      <h1><fa-icon icon="user"></fa-icon> Please sign in</h1>
       <p-card>
         <!-- Logout and session expired messages -->
         <ng-container *ngIf="authState$ | async as state">
-          <p-message severity="warn" text="Session expired, please log in again" *ngIf="state === authState.sessionExpired"></p-message>
-          <p-message severity="success" text="You have successfully logged out" *ngIf="state === authState.loggedOut"> </p-message>
+          <p-message severity="warn" styleClass="w-100 mb-3" text="Session expired, please log in again" *ngIf="state === authState.sessionExpired"></p-message>
+          <p-message severity="success" styleClass="w-100 mb-3" text="You have successfully logged out" *ngIf="state === authState.loggedOut"> </p-message>
         </ng-container>
         <!-- Login failure -->
         <p-message severity="error" text="Unable to log in, please check your username and password" *ngIf="errorApi"> </p-message>
@@ -39,14 +39,9 @@
 
         <p-footer>
           <div class="text-end">
-            <button
-              pButton
-              type="submit"
-              label="Sign In"
-              icon="fas fa-power-off"
-              [disabled]="formMain.invalid || waiting"
-              [ngClass]="{ 'btn-waiting': waiting }"
-            ></button>
+            <button type="submit" class="btn btn-primary" [disabled]="formMain.invalid || waiting" [ngClass]="{ 'btn-waiting': waiting }">
+              <fa-icon icon="power-off" class="me-2"></fa-icon> Sign In
+            </button>
           </div>
         </p-footer>
       </p-card>

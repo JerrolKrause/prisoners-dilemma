@@ -3,10 +3,18 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SettingsService } from '$settings';
 
-import { MenuItem } from 'primeng/api';
 import { UiStateService } from '$ui';
 import { AuthService, AuthState } from '../../../shared/services';
 import { untilDestroyed } from '@ngneat/until-destroy';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+
+interface MainMenuItem {
+  label: string;
+  icon?: IconProp;
+  routerLink?: string;
+  routerLinkActiveOptions?: any;
+  command?: () => any;
+}
 
 @Component({
   selector: 'app-nav',
@@ -20,31 +28,30 @@ export class NavComponent implements OnInit, OnDestroy {
   /**   Does the app have an update */
   public hasUpdate$ = this.ui.updateAvailable$;
 
-  public navMenu: MenuItem[] = [
+  public navMenu: MainMenuItem[] = [
     {
       label: 'Home',
-      expanded: true,
-      icon: 'fas fa-home me-1',
+      icon: 'home',
       routerLink: '/',
       routerLinkActiveOptions: { exact: true },
     },
     {
       label: 'Demo Route',
-      expanded: true,
-      icon: 'fas fa-cubes me-1',
+      icon: 'cubes',
       routerLink: '/route',
     },
   ];
 
-  public utilityMenu: MenuItem[] = [
+  public utilityMenu: MainMenuItem[] = [
     {
       label: 'Sign Out',
-      icon: 'fas fa-cubes me-1',
+      icon: 'power-off',
       command: () => this.logOut(),
     },
   ];
 
   public sidebarVisible = false;
+  public dropDownMenuVisible = false;
 
   constructor(private auth: AuthService, private settings: SettingsService, private ui: UiStateService, private router: Router) {}
 

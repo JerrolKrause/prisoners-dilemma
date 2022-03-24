@@ -5,7 +5,6 @@ import { map, filter, mergeMap } from 'rxjs/operators';
 
 import { environment } from '$env';
 import { NtsVersionManagementService } from './shared/services';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,9 +16,8 @@ export class AppComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private title: Title,
-    private version: NtsVersionManagementService,
-  ) // private sw: NtsServiceWorkerService,
-  {}
+    private version: NtsVersionManagementService, // private sw: NtsServiceWorkerService,
+  ) {}
 
   ngOnInit() {
     this.routeChange();
