@@ -8,8 +8,9 @@ import { Models } from '../../models/global.models';
 })
 export class ApiService {
   private store = ntsApiStoreCreator(this.http);
-  public users = this.store<Models.User>({ uniqueId: 'id', apiUrl: '//jsonplaceholder.typicode.com/users' });
+  public users = this.store<Models.User>({ uniqueId: 'id', apiUrl: 'https://jsonplaceholder.typicode.com/users' });
 
+  // public users$ = this.http.get()
   // List all store services here
   constructor(public http: HttpClient) {}
 }

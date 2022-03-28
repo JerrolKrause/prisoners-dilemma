@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { merge, interval, BehaviorSubject, fromEvent } from 'rxjs';
+import { merge, interval, BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { throttleTime, tap, switchMap, filter, map, distinctUntilChanged, startWith, take } from 'rxjs/operators';
 import { DialogService } from 'primeng/dynamicdialog';
 import { environment } from '$env';
@@ -34,20 +34,9 @@ export class AuthService {
   private logoutModalVisible = false;
 
   /** User interaction events. Watches mouse movement, clicks and key presses */
-  private refreshEvent$ = merge(fromEvent(document, 'keypress'), fromEvent(document, 'mousemove'), fromEvent(document, 'click')).pipe(
-    throttleTime(1000), // Throttle to every one second
-    startWith(0),
-  ); // 10 seconds
-
+  private refreshEvent$?: Observable<number | Event>;
   /** Logout timer that resets after every user interaction event */
-  private logoutTimerExpired$ = this.refreshEvent$.pipe(
-    switchMap(() => interval(1000)), // Reset interval everytime refresh fires
-    // tap(val => console.log(val, this.idleDuration)), // Test auth functionality
-    filter(() => !!this.settings.token), // Only capture refresh events if token present
-    map(val => (val > this.idleDuration ? true : false)), // If val is greater than duration, convert to true or false
-    startWith(false),
-    distinctUntilChanged(),
-  );
+  private logoutTimerExpired$?: Observable<boolean>;
 
   constructor(
     private http: HttpClient,
@@ -56,6 +45,35 @@ export class AuthService {
     private settings: SettingsService,
     public dialogService: DialogService,
   ) {
+    // If a token was passed in via query param
+    this.route.queryParams.pipe(take(1)).subscribe(params => {
+      if (params['token']) {
+        this.settings.token = params['token'];
+      }
+    });
+
+    // Browser check
+    if (!this.settings.isBrowser) {
+      return;
+    }
+
+    // Start subs to DOM events
+    this.refreshEvent$ = merge(fromEvent(document, 'keypress'), fromEvent(document, 'mousemove'), fromEvent(document, 'click'))
+      .pipe(
+        throttleTime(1000), // Throttle to every one second
+        startWith(0),
+      )
+      .pipe();
+
+    this.logoutTimerExpired$ = this.refreshEvent$.pipe(
+      switchMap(() => interval(1000)), // Reset interval everytime refresh fires
+      // tap(val => console.log(val, this.idleDuration)), // Test auth functionality
+      filter(() => !!this.settings.token), // Only capture refresh events if token present
+      map(val => (val > this.idleDuration ? true : false)), // If val is greater than duration, convert to true or false
+      startWith(false),
+      distinctUntilChanged(),
+    );
+
     // Manage logout timer
     // Only fire events when timer expires and is not inactive (IE the logout modal is active)
     this.logoutTimerExpired$.pipe(filter(expired => expired && !this.logoutModalVisible)).subscribe(() => {
@@ -67,37 +85,13 @@ export class AuthService {
     if (environment.endpoints.authTokenRefresh) {
       this.refreshEvent$
         .pipe(
+          filter(refreshEvent => !!refreshEvent), // Token refresh can only occur after refreshEvent$ is initialized
           filter(() => !!this.settings.token), // Only capture refresh events if token present
           throttleTime(this.tokenRefreshInterval), // Throttle time using refresh interval
           filter(() => !this.logoutModalVisible), // Only refresh token if timer not expired
         )
         .subscribe(() => this.refreshToken()); // Refresh token
     }
-
-    // If a token was passed in via query param
-    this.route.queryParams.pipe(take(1)).subscribe(params => {
-      if (params['token']) {
-        this.settings.token = params['token'];
-      }
-    });
-
-    /** Extract a token passed in via matrix notation
-    // If a token is passed in via matrix notation params, update app settings.
-    // Need to use matrix notation /#/route;token=123456456456
-    this.router.events.subscribe(val => {
-      if (
-        val &&
-        val instanceof RoutesRecognized &&
-        val.state &&
-        val.state.root &&
-        val.state.root.firstChild &&
-        val.state.root.firstChild.params.token
-      ) {
-        this.settings.token = val.state.root.firstChild.params.token;
-        this.setTimer(this.setTimerDefaultSeconds); // Start the session timer with the default time
-      }
-    });
-     */
   }
 
   /**

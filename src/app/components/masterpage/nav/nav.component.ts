@@ -5,7 +5,7 @@ import { SettingsService } from '$settings';
 
 import { UiStateService } from '$ui';
 import { AuthService, AuthState } from '../../../shared/services';
-import { untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface MainMenuItem {
@@ -16,6 +16,7 @@ interface MainMenuItem {
   command?: () => any;
 }
 
+@UntilDestroy()
 @Component({
   selector: 'app-nav',
   styleUrls: ['./nav.component.scss'],
@@ -36,9 +37,10 @@ export class NavComponent implements OnInit, OnDestroy {
       routerLinkActiveOptions: { exact: true },
     },
     {
-      label: 'Demo Route',
-      icon: 'cubes',
-      routerLink: '/route',
+      label: 'Users Demo',
+      icon: 'users',
+      routerLink: '/users',
+      routerLinkActiveOptions: { exact: true },
     },
   ];
 
@@ -53,7 +55,7 @@ export class NavComponent implements OnInit, OnDestroy {
   public sidebarVisible = false;
   public dropDownMenuVisible = false;
 
-  constructor(private auth: AuthService, private settings: SettingsService, private ui: UiStateService, private router: Router) {}
+  constructor(private settings: SettingsService, private ui: UiStateService, private router: Router, private auth: AuthService) {}
 
   ngOnInit(): void {
     // On route change, if mobile nav is open close it

@@ -1,7 +1,13 @@
+import { isBrowser } from '../../services';
+
 /**
  * Check if current browser is Chrome
  */
 export const isBrowserChrome = () => {
+  if (!isBrowser) {
+    return false;
+  }
+
   const ua = window.navigator.userAgent;
   const isChrome = /Chrome/i.test(ua) && !/Edge/i.test(ua);
 
@@ -12,6 +18,9 @@ export const isBrowserChrome = () => {
  * Check if current browser is Firefox
  */
 export const isBrowserFirefox = () => {
+  if (!isBrowser) {
+    return false;
+  }
   const ua = window.navigator.userAgent;
   const isFirefox = /Firefox/i.test(ua);
 
@@ -22,6 +31,9 @@ export const isBrowserFirefox = () => {
  * Check if current browser is IE
  */
 export const isBrowserIE = () => {
+  if (!isBrowser) {
+    return false;
+  }
   const ua = window.navigator.userAgent;
   const isIE = /MSIE|Trident/.test(ua);
 
@@ -32,6 +44,9 @@ export const isBrowserIE = () => {
  * Check if current browser is a mobile browser
  */
 export const isBrowserMobile = () => {
+  if (!isBrowser) {
+    return false;
+  }
   const ua = window.navigator.userAgent;
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
 

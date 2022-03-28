@@ -74,4 +74,3 @@ export class FullScreenDirective implements AfterViewInit, OnChanges {
     }
   }
 }
-// let height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;

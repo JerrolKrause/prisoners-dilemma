@@ -1,18 +1,26 @@
 // @angular modules
 import { SiteModule } from '$site';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ErrorHandler, Injector, NgModule } from '@angular/core'; // APP_INITIALIZER,
-import { BrowserModule } from '@angular/platform-browser';
+import { enableProdMode, ErrorHandler, Injector, NgModule } from '@angular/core'; // APP_INITIALIZER,
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Main entrypoint component
 import { AppComponent } from './app.component';
-import { AppRouterModule } from './app.routes.module';
 import { NoContentComponent } from './routes/no-content/no-content.component';
 import { GlobalErrorHandler } from './shared/interceptors/error.interceptor';
 import { HttpInterceptorService } from './shared/interceptors/http.interceptor';
+import { ScullyLibModule } from '@scullyio/ng-lib';
+import { isBrowser } from './shared/services';
+import { UrlSerializer } from '@angular/router';
+import { environment } from '$env';
+import { TrailingSlashUrlSerializer } from './shared/utils/url-serializer.util';
+import { AppRouterModule } from './app.routes.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Enables faster prod mode, does disable some dirty error checking though
-// enableProdMode();
+if (environment.production) {
+  enableProdMode();
+}
 
 // Components
 export const APP_COMPONENTS = [
@@ -21,14 +29,26 @@ export const APP_COMPONENTS = [
   NoContentComponent,
 ];
 
+// Scully is not node compatible, only load Scully when not on node
+let Scully = [
+  ScullyLibModule.forRoot({
+    useTransferState: true,
+    alwaysMonitor: true,
+  }),
+];
+if (!isBrowser) {
+  Scully = [];
+}
+
 export let InjectorInstance: Injector;
 
 @NgModule({
   declarations: [APP_COMPONENTS],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'angular-starter' }),
+    BrowserModule.withServerTransition({ appId: environment.appID }),
+    BrowserTransferStateModule,
     HttpClientModule,
-    // BrowserAnimationsModule,
+    BrowserAnimationsModule, // Adds 3k over no animation
     AppRouterModule,
 
     /** Uncomment to enable SW
@@ -37,10 +57,11 @@ export let InjectorInstance: Injector;
       registrationStrategy: 'registerImmediately',
     }),
      */
-
     SiteModule,
+    ...Scully,
   ],
   providers: [
+    { provide: UrlSerializer, useClass: TrailingSlashUrlSerializer },
     // AppConfigService, // App config/env settings
 
     // Global error handling

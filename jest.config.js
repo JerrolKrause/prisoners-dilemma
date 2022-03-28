@@ -1,8 +1,9 @@
 const { pathsToModuleNameMapper } = require('ts-jest');
 const { compilerOptions } = require('./tsconfig.json');
+import { environment } from './src/environments/environment.defaults';
 
 module.exports = {
-  displayName: 'angular-starter',
+  displayName: environment.appID,
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   collectCoverage: true,
   globals: {

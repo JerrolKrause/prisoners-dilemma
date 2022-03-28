@@ -1,3 +1,5 @@
+import { isBrowser } from '../services';
+
 /**
  * Helper utilities for string manipulation
  */
@@ -50,8 +52,8 @@ export class StringUtils {
    * @param val A string to obfuscate
    */
   static obfuscateAdd(val: string) {
-    if (val && window) {
-      return window.btoa(encodeURIComponent(val.toString()));
+    if (val && isBrowser) {
+      return btoa(encodeURIComponent(val.toString()));
     }
     return val;
   }
@@ -61,8 +63,8 @@ export class StringUtils {
    * @param val  A string to obfuscate
    */
   static obfuscateRemove(val: string) {
-    if (val && window) {
-      return decodeURIComponent(window.atob(val));
+    if (val && isBrowser) {
+      return decodeURIComponent(atob(val));
     }
     return val;
   }

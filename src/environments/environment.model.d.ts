@@ -2,6 +2,8 @@
  * Global defaults for environment configs
  */
 export interface EnvironmentConfig {
+  /** A unique ID to identify the app to Angular */
+  appID: string;
   /** Use production bundling */
   production: boolean;
   properties: {

@@ -1,32 +1,11 @@
-@import 'variables';
-@import 'mixins';
+// @import 'variables';
+// @import 'mixins';
 
 :host {
   display: block;
 }
 
-.nav-component {
-  .menu-link {
-    padding: 0.857rem;
-    color: #333;
-    border-radius: 3px;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: pointer;
-    display: inline-block;
-    align-items: center;
-    text-decoration: none;
-    overflow: hidden;
-    position: relative;
-    white-space: nowrap;
-    transition: 300ms ease;
-    &.thin {
-      padding: 0.4rem 0.857rem;
-    }
-    &:hover {
-      background: #eaeaea;
-    }
-  }
+#nav {
   .menu-container {
     position: relative;
   }
@@ -97,13 +76,26 @@
     background-color: #eaeaea;
   }
 }
-.p-sidebar {
-  .p-sidebar-content {
-    overflow: initial; // Remove if you need scrolling in the sidebar
+
+.nav-menu-link {
+  padding: 0.857rem;
+  color: #333;
+  border-radius: 3px;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  display: inline-block;
+  align-items: center;
+  text-decoration: none;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+  transition: 300ms ease;
+  &.thin {
+    padding: 0.4rem 0.857rem;
   }
-  .sidebar-close {
-    position: relative;
-    top: -17px;
+  &:hover {
+    background: #eaeaea;
   }
 }
 // Current bug in primeng sidebar where the mask does not display
@@ -121,11 +113,12 @@
   animation-fill-mode: forwards;
 }
 
-@keyframes fadeInSidebar {
-  0% {
-    opacity: 0;
+.p-sidebar {
+  .p-sidebar-content {
+    overflow: initial; // Remove if you need scrolling in the sidebar
   }
-  100% {
-    opacity: 1;
+  .sidebar-close {
+    position: relative;
+    top: -17px;
   }
 }

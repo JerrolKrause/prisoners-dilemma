@@ -1,0 +1,30 @@
+<div class="container mt-3" *ngIf="user$ | async as user">
+  <div style="max-width: 480px; margin: auto">
+    <a class="float-end" routerLink="/users/">Back to users</a>
+    <h1><i class="fas fa-user"></i> {{ user.name }}</h1>
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-sm table-striped mb-0">
+          <tbody>
+            <tr>
+              <td><strong>Name</strong></td>
+              <td>{{ user.name }}</td>
+            </tr>
+            <tr>
+              <td><strong>Email</strong></td>
+              <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+              <td><strong>Website</strong></td>
+              <td>{{ user.website }}</td>
+            </tr>
+            <tr>
+              <td><strong>Phone Number</strong></td>
+              <td>{{ user.phone }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -35,6 +35,14 @@
             ]
           },
           "configurations": {
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
             "qa": {
               "budgets": [
                 {
@@ -116,10 +124,14 @@
             "port": 4200
           },
           "configurations": {
+            "development": {
+              "browserTarget": "angular-starter:build:development"
+            },
             "production": {
               "browserTarget": "angular-starter:build:production"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -144,9 +156,56 @@
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "dist/server",
-            "main": "./src/main.server.ts",
+            "main": "./server.ts",
             "tsConfig": "./src/tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false
+            }
           }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "angular-starter:build:development",
+              "serverTarget": "angular-starter:server:development"
+            },
+            "production": {
+              "browserTarget": "angular-starter:build:production",
+              "serverTarget": "angular-starter:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": ["/"]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "angular-starter:build:production",
+              "serverTarget": "angular-starter:server:production"
+            },
+            "development": {
+              "browserTarget": "angular-starter:build:development",
+              "serverTarget": "angular-starter:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     },
