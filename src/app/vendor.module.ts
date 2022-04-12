@@ -31,6 +31,7 @@ const MODULES = [
   ConfirmDialogModule,
   DynamicDialogModule,
   OverlayPanelModule,
+  IconsModule,
 ];
 
 @NgModule({

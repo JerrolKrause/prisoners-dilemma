@@ -46,6 +46,7 @@ import {
 export class IconsModule {
   constructor(library: FaIconLibrary) {
     library.addIcons(
+      faPhone,
       faEnvelope,
       faPowerOff,
       faSpinner,
