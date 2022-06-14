@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Models } from '../../shared/models';
 import { ApiService } from '../../shared/stores/api';
 
@@ -27,7 +27,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   /** Create or edit a user */
   public isEdit = false;
 
-  constructor(private api: ApiService, private fb: FormBuilder) {}
+  constructor(private api: ApiService, private fb: UntypedFormBuilder) {}
 
   ngOnInit() {
     this.users.refresh().subscribe();

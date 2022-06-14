@@ -239,7 +239,6 @@
       }
     }
   },
-  "defaultProject": "angular-starter",
   "schematics": {
     "@schematics/angular:component": {
       "changeDetection": "OnPush",
@@ -253,6 +252,8 @@
 
   "cli": {
     "analytics": false,
-    "defaultCollection": "@ntersol/schematics"
+    "schematicCollections": [
+      "@ntersol/schematics"
+    ]
   }
 }

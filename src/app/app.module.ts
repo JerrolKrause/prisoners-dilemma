@@ -43,49 +43,46 @@ if (!isBrowser) {
 export let InjectorInstance: Injector;
 
 @NgModule({
-  declarations: [APP_COMPONENTS],
-  imports: [
-    BrowserModule.withServerTransition({ appId: environment.appID }),
-    BrowserTransferStateModule,
-    HttpClientModule,
-    BrowserAnimationsModule, // Adds 3k over no animation
-    AppRouterModule,
-
-    /** Uncomment to enable SW
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.settings.enableServiceWorker,
-      registrationStrategy: 'registerImmediately',
-    }),
-     */
-    SiteModule,
-    ...Scully,
-  ],
-  providers: [
-    { provide: UrlSerializer, useClass: TrailingSlashUrlSerializer },
-    // AppConfigService, // App config/env settings
-
-    // Global error handling
-    {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandler,
-    },
-    // HTTP interceptor for auth
-    HttpInterceptorService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpInterceptorService,
-      multi: true,
-    },
-    // App initializer for startup
-    // {
-    //  provide: APP_INITIALIZER,
-    //  useFactory: AppInit,
-    //  deps: [AppSettings, AppConfigService],
-    //  multi: true,
-    // },
-  ],
-  bootstrap: [AppComponent],
-  entryComponents: [],
+    declarations: [APP_COMPONENTS],
+    imports: [
+        BrowserModule.withServerTransition({ appId: environment.appID }),
+        BrowserTransferStateModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        AppRouterModule,
+        /** Uncomment to enable SW
+        ServiceWorkerModule.register('ngsw-worker.js', {
+          enabled: environment.settings.enableServiceWorker,
+          registrationStrategy: 'registerImmediately',
+        }),
+         */
+        SiteModule,
+        ...Scully,
+    ],
+    providers: [
+        { provide: UrlSerializer, useClass: TrailingSlashUrlSerializer },
+        // AppConfigService, // App config/env settings
+        // Global error handling
+        {
+            provide: ErrorHandler,
+            useClass: GlobalErrorHandler,
+        },
+        // HTTP interceptor for auth
+        HttpInterceptorService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpInterceptorService,
+            multi: true,
+        },
+        // App initializer for startup
+        // {
+        //  provide: APP_INITIALIZER,
+        //  useFactory: AppInit,
+        //  deps: [AppSettings, AppConfigService],
+        //  multi: true,
+        // },
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private injector: Injector) {

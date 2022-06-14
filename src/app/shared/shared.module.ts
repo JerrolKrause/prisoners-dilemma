@@ -43,13 +43,12 @@ export const APP_PIPES_DIRECTIVES = [
 ];
 
 @NgModule({
-  imports: [
-    // Angular
-    CommonModule,
-  ],
-  providers: [DatePipe, CurrencyPipe],
-  declarations: [APP_PIPES_DIRECTIVES],
-  exports: [APP_PIPES_DIRECTIVES],
-  entryComponents: [],
+    imports: [
+        // Angular
+        CommonModule,
+    ],
+    providers: [DatePipe, CurrencyPipe],
+    declarations: [APP_PIPES_DIRECTIVES],
+    exports: [APP_PIPES_DIRECTIVES]
 })
 export class SharedModule {}

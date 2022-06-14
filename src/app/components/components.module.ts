@@ -22,17 +22,16 @@ const APP_MODALS = [LogoutModalComponent, FeedbackModalComponent];
 export const APP_COMPONENTS = [...APP_MODALS, FooterComponent, HeaderComponent, LayoutMainComponent, LayoutSingleComponent, NavComponent];
 
 @NgModule({
-  imports: [
-    // Angular
-    CommonModule,
-    // Shared
-    SharedModule,
-    // Vendors
-    VendorModule,
-  ],
-  providers: [],
-  declarations: [APP_COMPONENTS],
-  exports: [APP_COMPONENTS],
-  entryComponents: [APP_MODALS],
+    imports: [
+        // Angular
+        CommonModule,
+        // Shared
+        SharedModule,
+        // Vendors
+        VendorModule,
+    ],
+    providers: [],
+    declarations: [APP_COMPONENTS],
+    exports: [APP_COMPONENTS]
 })
 export class ComponentsModule {}

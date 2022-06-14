@@ -13,10 +13,9 @@ import { RouteApiService } from './shared/stores/api/route-api.service';
 import { HomeComponent } from './home.component';
 
 @NgModule({
-  imports: [CommonModule, SiteModule, routing],
-  declarations: [HomeComponent],
-  providers: [RouteUiService, RouteApiService],
-  exports: [],
-  entryComponents: [],
+    imports: [CommonModule, SiteModule, routing],
+    declarations: [HomeComponent],
+    providers: [RouteUiService, RouteApiService],
+    exports: []
 })
 export class HomeModule {}

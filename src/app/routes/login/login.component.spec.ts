@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CardModule } from 'primeng/card';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -17,7 +17,7 @@ describe('LoginComponent', () => {
       TestBed.configureTestingModule({
         declarations: [LoginComponent],
         imports: [HttpClientTestingModule, RouterTestingModule, ReactiveFormsModule, CardModule, SiteModule, MessageModule],
-        providers: [DialogService, FormBuilder],
+        providers: [DialogService, UntypedFormBuilder],
       }).compileComponents();
     }),
   );
