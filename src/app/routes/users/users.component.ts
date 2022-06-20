@@ -1,8 +1,18 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormControl, NonNullableFormBuilder } from '@angular/forms';
 import { Models } from '../../shared/models';
 import { ApiService } from '../../shared/stores/api';
 
+interface UserForm {
+  address: FormControl<Models.Address>;
+  company: FormControl<Models.Company>;
+  email: FormControl<string>;
+  id: FormControl<number>;
+  name: FormControl<string>;
+  phone: FormControl<string>;
+  username: FormControl<string>;
+  website: FormControl<string>;
+}
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -13,21 +23,21 @@ export class UsersComponent implements OnInit, OnDestroy {
   public users = this.api.users;
 
   /** Form used to create/edit user */
-  public userForm = this.fb.group({
-    address: [],
-    company: [],
-    email: [],
-    id: [],
-    name: [],
-    phone: [],
-    username: [],
-    website: [],
+  public userForm = this.fb.group<UserForm>({
+    address: new FormControl(),
+    company: new FormControl(),
+    email: new FormControl(),
+    id: new FormControl(),
+    name: new FormControl(),
+    phone: new FormControl(),
+    username: new FormControl(),
+    website: new FormControl(),
   });
 
   /** Create or edit a user */
   public isEdit = false;
 
-  constructor(private api: ApiService, private fb: UntypedFormBuilder) {}
+  constructor(private api: ApiService, private fb: NonNullableFormBuilder) {}
 
   ngOnInit() {
     this.users.refresh().subscribe();

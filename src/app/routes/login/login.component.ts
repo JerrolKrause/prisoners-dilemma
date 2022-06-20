@@ -1,11 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Validators, UntypedFormBuilder } from '@angular/forms';
+import { Validators, NonNullableFormBuilder, FormControl } from '@angular/forms';
 
 import { SettingsService } from '$settings';
 import { AuthService, AuthState } from '../../shared/services/auth.service';
 import { DomService } from '../../shared/services/dom.service';
 
+interface LoginForm {
+  userName: FormControl<string>;
+  password: FormControl<string>;
+  remember: FormControl<boolean>;
+}
 // Localstorage key to store username
 const savedUserName = 'savedUserName';
 
@@ -14,10 +19,10 @@ const savedUserName = 'savedUserName';
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  public formMain = this.fb.group({
-    userName: [null || 'juser', [Validators.required]],
-    password: ['password', [Validators.required]],
-    remember: [null],
+  public formMain = this.fb.group<LoginForm>({
+    userName: new FormControl('juser', { validators: Validators.required, nonNullable: true }),
+    password: new FormControl('password', { validators: Validators.required, nonNullable: true }),
+    remember: new FormControl(false, { nonNullable: true }),
   });
   public waiting: boolean | undefined;
   public errorApi: any | null | undefined;
@@ -33,7 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private fb: UntypedFormBuilder,
+    private fb: NonNullableFormBuilder,
     private settings: SettingsService,
     private dom: DomService,
   ) {}
@@ -61,7 +66,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // If remember username is set, save to localstorage
     if (this.formMain && this.formMain.value.remember) {
-      this.dom.localStorage?.setItem(savedUserName, this.formMain.value.userName);
+      this.dom.localStorage?.setItem(savedUserName, this.formMain.value.userName || '');
     } else {
       this.dom.localStorage.removeItem(savedUserName);
     }
@@ -69,7 +74,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Authenticate
     this.authService.logIn(this.formMain.value).subscribe(
       () => {
-        this.settings.userName = this.formMain.value.userName;
+        this.settings.userName = this.formMain.value.userName || '';
         // get return url from route parameters or default to '/'
         const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.router.navigate([returnUrl]);
