@@ -110,7 +110,7 @@ npx scully serve
 ### VSCode Tools
 
 - Prettier: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
-- TS Lint: https://marketplace.visualstudio.com/items?itemName=eg2.tslint
+- ESLint: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
 
 ### Visual Studio Tools
 
