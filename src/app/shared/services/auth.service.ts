@@ -5,9 +5,10 @@ import { merge, interval, BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { throttleTime, tap, switchMap, filter, map, distinctUntilChanged, startWith, take } from 'rxjs/operators';
 import { DialogService } from 'primeng/dynamicdialog';
 import { environment } from '$env';
-import { SettingsService } from '$settings';
 import { Models } from '../models/global.models';
 import { LogoutModalComponent } from '../../components/modals';
+import { AppStorageService } from './app-storage.service';
+import { DomService } from '@ntersol/services';
 
 export enum AuthState {
   initial,
@@ -42,18 +43,19 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private settings: SettingsService,
+    private appStorage: AppStorageService,
     public dialogService: DialogService,
+    private dom: DomService,
   ) {
     // If a token was passed in via query param
     this.route.queryParams.pipe(take(1)).subscribe(params => {
       if (params['token']) {
-        this.settings.token = params['token'];
+        this.appStorage.token = params['token'];
       }
     });
 
     // Browser check
-    if (!this.settings.isBrowser) {
+    if (!this.dom.isBrowser) {
       return;
     }
 
@@ -68,7 +70,7 @@ export class AuthService {
     this.logoutTimerExpired$ = this.refreshEvent$.pipe(
       switchMap(() => interval(1000)), // Reset interval everytime refresh fires
       // tap(val => console.log(val, this.idleDuration)), // Test auth functionality
-      filter(() => !!this.settings.token), // Only capture refresh events if token present
+      filter(() => !!this.appStorage.token), // Only capture refresh events if token present
       map(val => (val > this.idleDuration ? true : false)), // If val is greater than duration, convert to true or false
       startWith(false),
       distinctUntilChanged(),
@@ -86,7 +88,7 @@ export class AuthService {
       this.refreshEvent$
         .pipe(
           filter(refreshEvent => !!refreshEvent), // Token refresh can only occur after refreshEvent$ is initialized
-          filter(() => !!this.settings.token), // Only capture refresh events if token present
+          filter(() => !!this.appStorage.token), // Only capture refresh events if token present
           throttleTime(this.tokenRefreshInterval), // Throttle time using refresh interval
           filter(() => !this.logoutModalVisible), // Only refresh token if timer not expired
         )
@@ -106,7 +108,7 @@ export class AuthService {
         : this.http.get<Models.Auth>('assets/mock-data/login.json');
     return authApi.pipe(
       tap(response => {
-        this.settings.token = response.data.token;
+        this.appStorage.token = response.data.token;
         this.authState$.next(AuthState.loggedIn);
         // Override default idle duration if specified in the api response
         if (response.data.expirationSeconds) {
@@ -128,10 +130,10 @@ export class AuthService {
 
     refreshApi.subscribe(
       response => {
-        if (this.settings.token) {
+        if (this.appStorage.token) {
           // Make sure a token is present before it is replaced
           this.authState$.next(AuthState.loggedIn);
-          this.settings.token = response.data.token;
+          this.appStorage.token = response.data.token;
         }
       },
       () => this.logOut(AuthState.sessionExpired),
@@ -166,7 +168,7 @@ export class AuthService {
    * Log the user out. Clear stored data and redirect to login page
    */
   public logOut(authState: AuthState): void {
-    this.settings.token = null;
+    this.appStorage.token = null;
     this.logoutModalVisible = false;
     this.authState$.next(authState);
     // Don't throw a redirect url if this is the dashboard since that is default on login

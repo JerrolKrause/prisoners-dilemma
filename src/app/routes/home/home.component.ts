@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { AppStorageService } from '$shared';
 
 @Component({
   selector: 'app-home',

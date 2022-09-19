@@ -1,18 +1,11 @@
 /**
- * Generate models with NSwagStudio: https://github.com/RSuter/NSwag/wiki/NSwagStudio
- * Make sure to point at the docs url in the top green header
- * IE http://localhost:57462/swagger/docs/v1
- * NOT http://localhost:57462/swagger/ui/index#/
-
- Config Options:
-  - Set namespace to Models
-  - TS version 2.7
-  - Generate DTO types: Checked
-  - Type Style: Interface
-  - Null Value: Null
-  - Leave everything else blank or unchecked here
+ * Global model definitions
+ *
+ * There are 2 module declarations in this file. 1 is for custom hand coded models, the other is for automatically generated ones from swagger
+ *
+ * Custom model definitions
+ *
  */
-
 export module Models {
   export interface Auth {
     data: {
@@ -25,30 +18,14 @@ export module Models {
     meta: { requestTraceId: string };
   }
 
-  export interface Address {
-    street?: string;
-    suite?: string;
-    city?: string;
-    zipcode?: string;
-    geo?: {
-      lat?: string;
-      lng?: string;
-    };
-  }
-  export interface Company {
-    name?: string;
-    catchPhrase?: string;
-    bs?: string;
-  }
   export interface User {
     id: number;
     name?: string;
     username: string;
     email?: string;
-    address?: Address
-    phone?: string;
+    favColor?: Color;
     website?: string;
-    company?: Company;
+    phone?: string;
   }
 
   export enum Color {
@@ -56,20 +33,30 @@ export module Models {
     blue,
     orange,
   }
+}
 
+/**
+ * Models automatically generated from swagger with nswagstudio
+ *
+ * Generate models with NSwagStudio: https://github.com/RSuter/NSwag/wiki/NSwagStudio
+ * Make sure to point at the docs url in the top green header
+ * IE http://localhost:57462/swagger/docs/v1
+ * NOT http://localhost:57462/swagger/ui/index#/
+
+ Config Options:
+  - Set namespace to Models
+  - TS version 2.7
+  - Generate DTO types: Checked
+  - Type Style: Interface
+  - Null Value: Null
+  - Leave everything else blank or unchecked here
+  - Remove redundent " | undefined" from each one
+ */
+export module Models {
   /********************************
    *  BEGIN NSWAG STUDIO COPY/PASTE
    ********************************/
-
   /********************************
    *  END NSWAG STUDIO COPY/PASTE
-   ********************************/
-
-  /********************************
-   *  BEGIN EXTENDS NSWAG
-   ********************************/
-
-  /********************************
-   *  END EXTENDS NSWAG
    ********************************/
 }

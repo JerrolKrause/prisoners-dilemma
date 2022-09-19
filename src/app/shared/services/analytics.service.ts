@@ -1,200 +1,105 @@
+/// <reference types="@types/gtag.js" />
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { debounceTime, filter, map, mergeMap } from 'rxjs/operators';
-
-declare var dataLayer: any;
+import { DomService } from '@ntersol/services';
 
 declare global {
   interface Window {
-    dataLayer: any;
-    gtag: any;
-    ga: any;
+    dataLayer: any[];
+    gtag: Gtag.Gtag;
   }
 }
-export interface GAData {
-  hitType: string;
-  eventCategory?: string;
-  eventAction: string;
-  eventLabel?: string;
-  eventValue?: number;
-}
-// SSR Checks
-export const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
-export const isBrowser = !isNode;
 
-// https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
-// https://www.bounteous.com/insights/2018/03/30/single-page-applications-google-analytics/
+/**
+ * Google Analytics Wrapper
+ *
+ * - Adds type safety and Node.js support
+ * - Install definitions: `npm install --save-dev @types/gtag.js`
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class AnalyticsService {
   /** Google analytics account ID */
-  private gaId = '';
+  public gaId: string | null = null;
   private loaded = false;
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        map(() => this.route),
-        map(r => {
-          while (r.firstChild) {
-            r = r.firstChild;
-          }
-          return r;
-        }),
-        filter(r => r.outlet === 'primary'),
-        mergeMap(r => r.data), // Extract data from the route file if additional metadata is required
-        debounceTime(1), // Add a delay to allow any other changes to meta to propagate first
-        // filter(d => !!d.disableAutoTrack),
-      ) // Pass user's current url to GA on route change
-      .subscribe(() => this.trackPageViewGA());
-  }
+  constructor(private dom: DomService) {}
 
   /**
-   * Load a script
-   * @param url
-   * @param callback
-   */
-  public start(gaId: string) {
-    if (!isBrowser) {
-      return;
-    }
-
-    // If GA
-    if (gaId) {
-      this.gaId = gaId;
-      this.loadGA(gaId);
-    }
-  }
-
-  /**
-   * Track an event
-   * @param eventName
-   * @param data
-   */
-  public trackEventGA(eventName = 'pageview', data: GAData) {
-    if (!isBrowser || !this.loaded) {
-      return;
-    }
-
-    if (!this.gaId) {
-      console.error('Missing Google Analytics account ID');
-      return;
-    }
-
-    if (!!window.ga) {
-      window.ga('send', data);
-    } else if (!!window.gtag) {
-      window.gtag.push({ event: eventName });
-      window.gtag('config', this.gaId, { send_page_view: false });
-      window.gtag('event', event, {
-        send_to: this.gaId,
-      });
-    } else if (!!window.dataLayer) {
+   * Load and initialize google analytics dynamically. This can be useful when using different tracking scripts per environment
+   *
+   * The declaration in the index.html file is preferable
+   * ```
+   * <script>
       window.dataLayer = window.dataLayer || [];
-      dataLayer.push({ event: eventName });
-    }
-  }
-
-  /**
-   * Send a pageview to GA
-   * @param pageUrl
-   */
-  public trackPageViewGA(pageUrl = window.location.pathname + window.location.hash + window.location.search) {
-    if (!isBrowser || !this.loaded) {
-      return;
-    }
-
-    if (!this.gaId) {
-      console.error('Missing Google Analytics account ID');
-      return;
-    }
-    // Remove any hash fragment for consistentcy
-    pageUrl = pageUrl.replace(/\/#\//gi, '/');
-    // console.warn('trackPageViewGA', pageUrl);
-    if (!!window.ga) {
-      window.ga('set', 'page', pageUrl);
-      window.ga('send', 'pageview');
-    } else if (!!window.gtag) {
-      window.gtag('config', this.gaId, {
-        page_path: pageUrl,
-      });
-    } else if (!!window.dataLayer) {
-      window.dataLayer = window.dataLayer || [];
-      dataLayer.push({
-        event: 'pageview',
-        page: {
-          url: pageUrl,
-        },
-      });
-    }
-  }
-
-  /**
-   * Identify the user to GA, needs unique ID
-   * @param uniqueId
-   */
-  public identifyGA(uniqueId: string | null) {
-    if (!isBrowser || !uniqueId) {
-      return;
-    }
-    // GA identify
-    if (!!window?.ga) {
-      window.ga('set', 'userId', uniqueId);
-      window.ga('set', '&uid', uniqueId);
-    }
-    // Gtag
-    if (!!window?.gtag) {
-      window.gtag('set', 'userId', uniqueId);
-      window.gtag('set', '&uid', uniqueId);
-    }
-    // gtm
-    if (!!dataLayer) {
-      window.dataLayer = window.dataLayer || [];
-      dataLayer.push({
-        event: 'login',
-        userId: uniqueId,
-        '&uid': uniqueId,
-      });
-    }
-  }
-
-  /**
-   * Load and initialize google analytics, set account ID
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'X-XXXXXXXX');
+    </script>
+   * ```
+   *
    * @param gaId
    */
-  private loadGA(gaId: string) {
-    if (!isBrowser) {
+  public load(gaId: string) {
+    if (!this.dom.window || this.loaded) {
       return;
     }
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
+    this.gaId = gaId;
+    // Initial default global props just in case they were not declared in the root index file
+    this.dom.window.dataLayer = this.dom?.window?.dataLayer || [];
+    if (!this.dom.window.gtag) {
+      this.dom.window.gtag = () => this.dom?.window?.dataLayer.push(arguments);
     }
-    (gtag as any)('js', new Date());
-    (gtag as any)('config', this.gaId);
-    (gtag as any)('config', this.gaId);
-    // Script loaded in index.html
-    // Load GA script
-    const scriptGa = document.createElement('script');
-    scriptGa.type = 'text/javascript';
-    scriptGa.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
-    scriptGa.onload = () => this.gaLoaded();
-    document.head.appendChild(scriptGa);
+
+    this.gtag('js', new Date());
+    this.gtag('config', gaId);
+    // Load script asynchronously
+    if (this.dom.document) {
+      const scriptGa = this.dom.document.createElement('script');
+      scriptGa.type = 'text/javascript';
+      scriptGa.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+      scriptGa.onload = () => (this.loaded = true);
+      this.dom.document?.head.appendChild(scriptGa);
+    }
   }
 
   /**
-   * Check if GA of GTAG is loaded. If not poll for updates. GA scripts are loaded from GTM so there's no callback function
+   * Pass data to google analytics
+   * - https://developers.google.com/tag-platform/gtagjs/reference#event
+   * - https://developers.google.com/analytics/devguides/collection/gtagjs/events
+   *
+   * @example
+   * this.analytics.gtag('event', 'sign_up');
+   *
+   * @param args
+   * @returns
    */
-  private gaLoaded() {
-    if (!!window.ga) {
-      this.loaded = true;
-      window.ga('create', this.gaId);
-    } else if (!!window?.gtag) {
-      this.loaded = true;
-    } else {
-      setTimeout(() => this.gaLoaded(), 100);
-    }
+  public gtag(command: 'config', targetId: string, config?: Gtag.ControlParams | Gtag.EventParams | Gtag.ConfigParams | Gtag.CustomParams): void;
+  public gtag(command: 'set', targetId: string, config: Gtag.CustomParams | boolean | string): void;
+  public gtag(command: 'set', config: Gtag.CustomParams): void;
+  public gtag(command: 'js', config: Date): void;
+  public gtag(command: 'event', eventName: Gtag.EventNames | (string & {}), eventParams?: Gtag.ControlParams | Gtag.EventParams | Gtag.CustomParams): void;
+  public gtag(command: 'get', targetId: string, fieldName: Gtag.FieldNames | string, callback?: (field: string | Gtag.CustomParams | undefined) => any): void;
+  public gtag(command: 'consent', consentArg: Gtag.ConsentArg | string, consentParams: Gtag.ConsentParams): void;
+  public gtag(arg: any, arg2: any, arg3?: any) {
+    this.dom?.window?.gtag(arg, arg2, arg3);
+  }
+
+  /**
+   * Identify the user to GA with unique ID. Typically done on login or registration events.
+   *
+   * Do not use any personally identifiable user information like email or phone number
+   *
+   * @example
+   * this.analytics.identify('XXXXX-XXXXX-XXXXX-XXXXX');
+   *
+   * @param uniqueId
+   */
+  public identify(uniqueId: string | number | null) {
+    this.gtag('set', {
+      user_id: uniqueId,
+    });
   }
 }

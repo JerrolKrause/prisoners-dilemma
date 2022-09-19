@@ -1,4 +1,4 @@
-import { isBrowser } from '../services';
+import { isBrowser } from './is/is.util';
 
 /**
  * Helper utilities for string manipulation
@@ -13,7 +13,6 @@ export class StringUtils {
     return str;
   }
   static deserialize(str: string) {
-    console.log(str, typeof str);
     try {
       str = StringUtils.charShift(str, -10);
       str = StringUtils.obfuscateRemove(str);

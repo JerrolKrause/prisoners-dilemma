@@ -10,7 +10,7 @@
     </a>
     <div class="menu-container align-self-center ms-auto" #temp>
       <a label="Show" class="menu-bar-toggle">
-        <fa-icon icon="user" class="me-2"></fa-icon> <span class="me-2">{{ userName$ | async }}</span>
+        <fa-icon icon="user" class="me-2"></fa-icon> <span class="me-2" *ngIf="user$ | async as user">{{ user.name }}</span>
         <fa-icon icon="caret-down" class="icon-caret-down"></fa-icon>
       </a>
       <div class="menu-bar">

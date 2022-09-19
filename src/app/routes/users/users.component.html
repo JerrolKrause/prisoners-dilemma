@@ -1,73 +1,75 @@
-<div class="container mt-3" *ngIf="users.state$ | async as state">
-  <div class="row">
-    <div class="col col-12 col-md-9">
-      <a class="float-end" (click)="refresh()"><fa-icon icon="refresh"></fa-icon></a>
-      <h1><fa-icon icon="users"></fa-icon> List of users ({{ state?.data?.length ?? 0 }})</h1>
-      <div class="card">
-        <div class="card-body">
-          <nts-api-state [state]="state">
-            <div class="table-container">
-              <table class="table table-sm table-striped mb-0 table-mobile" *ngIf="!!state.data?.length">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let user of state.data">
-                    <td>
-                      <a [routerLink]="['./' + user.id]">{{ user.name }}</a>
-                    </td>
-                    <td>
-                      <a href="tel:{{ user.phone | phoneNumber }}">{{ user.phone | phoneNumber }}</a>
-                    </td>
-                    <td>
-                      <a href="mailto:{{ user.email }}">{{ user.email }}</a>
-                    </td>
-                    <td>
-                      <div class="text-end">
-                        <a class="me-3" (click)="edit(user)"><fa-icon icon="cog"></fa-icon></a>
-                        <a (click)="delete(user)"><fa-icon icon="trash"></fa-icon></a>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </nts-api-state>
-          <ng-template>
-            <p>No users found</p>
-          </ng-template>
+<app-masterpage>
+  <div class="container mt-3" *ngIf="users.state$ | async as state">
+    <div class="row">
+      <div class="col col-12 col-md-9">
+        <a class="float-end" (click)="refresh()"><fa-icon icon="refresh"></fa-icon></a>
+        <h1><fa-icon icon="users"></fa-icon> List of users ({{ state?.data?.length ?? 0 }})</h1>
+        <div class="card">
+          <div class="card-body">
+            <nts-api-state [state]="state">
+              <div class="table-container">
+                <table class="table table-sm table-striped mb-0 table-mobile" *ngIf="!!state.data?.length">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Phone</th>
+                      <th>Email</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let user of state.data">
+                      <td>
+                        <a [routerLink]="['./' + user.id]">{{ user.name }}</a>
+                      </td>
+                      <td>
+                        <a href="tel:{{ user.phone | phoneNumber }}">{{ user.phone | phoneNumber }}</a>
+                      </td>
+                      <td>
+                        <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                      </td>
+                      <td>
+                        <div class="text-end">
+                          <a class="me-3" (click)="edit(user)"><fa-icon icon="cog"></fa-icon></a>
+                          <a (click)="delete(user)"><fa-icon icon="trash"></fa-icon></a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </nts-api-state>
+            <ng-template>
+              <p>No users found</p>
+            </ng-template>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col col-12 col-md-3">
-      <div class="card mb-3">
-        <div class="card-body">
-          <a class="float-end" (click)="editUndo()" *ngIf="isEdit">Undo</a>
-          <h3 *ngIf="isEdit">Edit existing user</h3>
-          <h3 *ngIf="!isEdit">Add a new user</h3>
-          <hr />
-          <form [formGroup]="userForm">
-            <p>
-              <nts-form-field formControlName="name" placeholder="Name"> </nts-form-field>
-            </p>
-            <p>
-              <nts-form-field formControlName="email" placeholder="Email"> </nts-form-field>
-            </p>
-            <p>
-              <nts-form-field formControlName="phone" placeholder="Phone Number"> </nts-form-field>
-            </p>
-            <div class="float-end">
-              <button class="btn btn-primary" *ngIf="isEdit" (click)="save()"><fa-icon icon="cog"></fa-icon> Save User</button>
-              <button class="btn btn-primary" *ngIf="!isEdit" (click)="save()"><fa-icon icon="plus"></fa-icon> Create User</button>
-            </div>
-          </form>
+      <div class="col col-12 col-md-3">
+        <div class="card mb-3">
+          <div class="card-body">
+            <a class="float-end" (click)="editUndo()" *ngIf="isEdit">Undo</a>
+            <h3 *ngIf="isEdit">Edit existing user</h3>
+            <h3 *ngIf="!isEdit">Add a new user</h3>
+            <hr />
+            <form [formGroup]="userForm">
+              <p>
+                <nts-form-field formControlName="name" placeholder="Name"> </nts-form-field>
+              </p>
+              <p>
+                <nts-form-field formControlName="email" placeholder="Email"> </nts-form-field>
+              </p>
+              <p>
+                <nts-form-field formControlName="phone" placeholder="Phone Number"> </nts-form-field>
+              </p>
+              <div class="float-end">
+                <button class="btn btn-primary" *ngIf="isEdit" (click)="save()"><fa-icon icon="cog"></fa-icon> Save User</button>
+                <button class="btn btn-primary" *ngIf="!isEdit" (click)="save()"><fa-icon icon="plus"></fa-icon> Create User</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</app-masterpage>

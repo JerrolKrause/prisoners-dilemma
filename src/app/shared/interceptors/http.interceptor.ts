@@ -2,11 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { SettingsService } from '$settings';
-import { AuthService, AuthState } from '../services';
+import { AuthService, AuthState, isNode, AppStorageService } from '$shared';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
-
-export const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
@@ -14,7 +11,7 @@ export class HttpInterceptorService implements HttpInterceptor {
    * Append bearer token to auth settings
    * @param settings
    */
-  constructor(private settings: SettingsService, private auth: AuthService, private transferState: TransferState) {}
+  constructor(private appStorage: AppStorageService, private auth: AuthService, private transferState: TransferState) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Handle transfer state between node and the browser
@@ -33,8 +30,8 @@ export class HttpInterceptorService implements HttpInterceptor {
     // Add any custom headers
     const headersObj: Record<string, string> = {};
     // If token present, add bearer token
-    if (this.settings.token) {
-      headersObj['Authorization'] = 'Bearer ' + this.settings.token;
+    if (this.appStorage.token) {
+      headersObj['Authorization'] = 'Bearer ' + this.appStorage.token;
     }
 
     // Create headers element

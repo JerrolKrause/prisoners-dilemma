@@ -1,4 +1,8 @@
-import { isBrowser } from '../../services';
+/** Is currently node  */
+export const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
+
+/** Is currently a browser */
+export const isBrowser = !isNode;
 
 /**
  * Check if current browser is Chrome

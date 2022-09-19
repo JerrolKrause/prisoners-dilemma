@@ -1,14 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersComponent } from './users.component';
-import { SiteModule } from '$site';
+import { SharedModule } from '$shared';
 import { UsersRouting } from './users-routing.module';
 import { UserComponent } from './routes/user/user.component';
 import { NtsStateManagementModule } from '@ntersol/state-management';
 import { NtsFormsModule } from '@ntersol/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IconsModule, MasterPageModule } from '$components';
 
 @NgModule({
-  imports: [CommonModule, SiteModule, UsersRouting, NtsStateManagementModule, NtsFormsModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MasterPageModule,
+    IconsModule,
+    UsersRouting,
+    NtsStateManagementModule,
+    NtsFormsModule,
+  ],
   declarations: [UsersComponent, UserComponent],
 })
 export class UsersModule {}

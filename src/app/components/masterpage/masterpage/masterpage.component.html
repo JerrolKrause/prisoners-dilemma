@@ -1,0 +1,8 @@
+<app-header> <app-nav class="nav-component"></app-nav> </app-header>
+<main>
+  <router-outlet><ng-content></ng-content></router-outlet>
+</main>
+<app-footer></app-footer>
+<ng-container *ngIf="isBrowser">
+  <p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+</ng-container>

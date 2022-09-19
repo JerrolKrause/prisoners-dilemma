@@ -1,21 +1,18 @@
 // @angular modules
-import { SiteModule } from '$site';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { enableProdMode, ErrorHandler, Injector, NgModule } from '@angular/core'; // APP_INITIALIZER,
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// Main entrypoint component
-import { AppComponent } from './app.component';
-import { NoContentComponent } from './routes/no-content/no-content.component';
-import { GlobalErrorHandler } from './shared/interceptors/error.interceptor';
-import { HttpInterceptorService } from './shared/interceptors/http.interceptor';
-import { ScullyLibModule } from '@scullyio/ng-lib';
-import { isBrowser } from './shared/services';
 import { UrlSerializer } from '@angular/router';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Uncomment for animation, needed by some prime components
+import { ConfirmationService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ScullyLibModule } from '@scullyio/ng-lib';
+// Main entrypoint component
 import { environment } from '$env';
-import { TrailingSlashUrlSerializer } from './shared/utils/url-serializer.util';
+import { AppComponent } from './app.component';
 import { AppRouterModule } from './app.routes.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentsLazyLoad } from './components/components.lazy';
+import { isBrowser, HttpInterceptorService, GlobalErrorHandler, TrailingSlashUrlSerializer } from '$shared';
 
 // Enables faster prod mode, does disable some dirty error checking though
 if (environment.production) {
@@ -26,7 +23,6 @@ if (environment.production) {
 export const APP_COMPONENTS = [
   // App component
   AppComponent,
-  NoContentComponent,
 ];
 
 // Scully is not node compatible, only load Scully when not on node
@@ -43,46 +39,49 @@ if (!isBrowser) {
 export let InjectorInstance: Injector;
 
 @NgModule({
-    declarations: [APP_COMPONENTS],
-    imports: [
-        BrowserModule.withServerTransition({ appId: environment.appID }),
-        BrowserTransferStateModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        AppRouterModule,
-        /** Uncomment to enable SW
+  declarations: [APP_COMPONENTS],
+  imports: [
+    BrowserModule.withServerTransition({ appId: environment.appID }),
+    BrowserTransferStateModule,
+    HttpClientModule,
+    BrowserAnimationsModule, // Uncomment for animation, needed by some prime components
+    ComponentsLazyLoad, // Lazy loaded modules on the global scope
+    AppRouterModule, // App top level routing
+
+    /** Uncomment to enable SW
         ServiceWorkerModule.register('ngsw-worker.js', {
           enabled: environment.settings.enableServiceWorker,
           registrationStrategy: 'registerImmediately',
         }),
          */
-        SiteModule,
-        ...Scully,
-    ],
-    providers: [
-        { provide: UrlSerializer, useClass: TrailingSlashUrlSerializer },
-        // AppConfigService, // App config/env settings
-        // Global error handling
-        {
-            provide: ErrorHandler,
-            useClass: GlobalErrorHandler,
-        },
-        // HTTP interceptor for auth
-        HttpInterceptorService,
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: HttpInterceptorService,
-            multi: true,
-        },
-        // App initializer for startup
-        // {
-        //  provide: APP_INITIALIZER,
-        //  useFactory: AppInit,
-        //  deps: [AppSettings, AppConfigService],
-        //  multi: true,
-        // },
-    ],
-    bootstrap: [AppComponent]
+    ...Scully,
+  ],
+  providers: [
+    ConfirmationService,
+    DialogService,
+    { provide: UrlSerializer, useClass: TrailingSlashUrlSerializer },
+    // AppConfigService, // App config/env settings
+    // Global error handling
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
+    // HTTP interceptor for auth
+    HttpInterceptorService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true,
+    },
+    // App initializer for startup
+    // {
+    //  provide: APP_INITIALIZER,
+    //  useFactory: AppInit,
+    //  deps: [AppSettings, AppConfigService],
+    //  multi: true,
+    // },
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {
   constructor(private injector: Injector) {

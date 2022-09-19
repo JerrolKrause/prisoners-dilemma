@@ -1,8 +1,7 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 
 import { environment } from '$env';
-import { SettingsService } from '$settings';
-import { isBrowser } from '../services';
+import { AppStorageService, isBrowser } from '$shared';
 
 interface AngularError {
   promise: any;
@@ -25,7 +24,7 @@ interface LogError {
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  constructor(private settings: SettingsService) {}
+  constructor(private appStorage: AppStorageService) {}
 
   // Custom error handler for application/angular errors
   // Uses plain JS to eliminate any dependencies that may not be available due to the error
@@ -33,16 +32,16 @@ export class GlobalErrorHandler implements ErrorHandler {
     // If is browser
     // Does not have custom error message
     // Does not have http status field (to ignore http errors)
-    if (this.settings.isBrowser && !error.errorMsg && !error.hasOwnProperty('status') && environment.production) {
+    if (isBrowser && !error.errorMsg && !error.hasOwnProperty('status') && environment.production) {
       // If error endpoint specified, log errors
       if (environment.endpoints.errorPath) {
         this.logError(error);
       }
-      // this.settings.error$.next(error.message);
+      // this.appStorage.error$.next(error.message);
       this.resetState(error);
     }
     // Display error in node
-    if (!this.settings.isBrowser) {
+    if (!isBrowser) {
       console.error(error);
     }
     // Now throw the error to the console
@@ -61,7 +60,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     // const resetAction = () => {
     localStorage.clear();
     sessionStorage.clear();
-    window.location.href = '/#/login';
+    window.location.href = '/login';
     // };
     // If serviceworker is enabled, remove it first befire executing reset action, otherwise just reset
     // this.sw.isEnabled ? this.sw.remove() : resetAction();

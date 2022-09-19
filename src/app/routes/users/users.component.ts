@@ -1,11 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormControl, NonNullableFormBuilder } from '@angular/forms';
-import { Models } from '../../shared/models';
-import { ApiService } from '../../shared/stores/api';
+import { Models, ApiService, AppStorageService } from '$shared';
 
 interface UserForm {
-  address: FormControl<Models.Address>;
-  company: FormControl<Models.Company>;
+  address: FormControl<any>;
+  company: FormControl<any>;
   email: FormControl<string>;
   id: FormControl<number>;
   name: FormControl<string>;
@@ -20,6 +19,11 @@ interface UserForm {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersComponent implements OnInit, OnDestroy {
+  public user = this.appStorage.user;
+
+  public token = this.appStorage.token;
+  public token$ = this.appStorage.token$;
+
   public users = this.api.users;
 
   /** Form used to create/edit user */
@@ -37,11 +41,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   /** Create or edit a user */
   public isEdit = false;
 
-  constructor(private api: ApiService, private fb: NonNullableFormBuilder) {}
+  constructor(private api: ApiService, private fb: NonNullableFormBuilder, private appStorage: AppStorageService) {}
 
-  ngOnInit() {
-    this.users.refresh().subscribe();
-  }
+  ngOnInit() {}
 
   /**
    * Save a new user or update existing
@@ -96,4 +98,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {}
+
+  public update(name: string) {
+    this.appStorage.token = name;
+  }
 }

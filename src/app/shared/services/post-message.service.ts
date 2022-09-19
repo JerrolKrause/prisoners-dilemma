@@ -114,7 +114,7 @@ export class NtsPostMessageService {
     return {
       ...msg,
       appId: this.appId,
-      // token: this.settings.token,
+      // token: this.appStorage.token,
     };
   }
 }
