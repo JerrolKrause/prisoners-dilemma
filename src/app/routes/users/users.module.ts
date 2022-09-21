@@ -5,7 +5,7 @@ import { SharedModule } from '$shared';
 import { UsersRouting } from './users-routing.module';
 import { UserComponent } from './routes/user/user.component';
 import { NtsStateManagementModule } from '@ntersol/state-management';
-import { NtsFormsModule } from '@ntersol/forms';
+import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconsModule, MasterPageModule } from '$components';
 
@@ -19,7 +19,7 @@ import { IconsModule, MasterPageModule } from '$components';
     IconsModule,
     UsersRouting,
     NtsStateManagementModule,
-    NtsFormsModule,
+    InputTextModule,
   ],
   declarations: [UsersComponent, UserComponent],
 })

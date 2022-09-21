@@ -15,12 +15,12 @@
 
         <p class="mb-4">Please enter your username and password.</p>
 
-        <p class="p-float-label mb-4" [ngClass]="{ 'p-focus': !!formMain?.get('userName')?.value }">
+        <p class="p-float-label mb-4" [ngClass]="{ 'p-focus': !!formMain.get('userName')?.value }">
           <input id="userName" class="w-100 p-inputtext p-corner-all p-state-default p-widget" type="text" size="30" pInputText formControlName="userName" />
           <label for="userName">Username</label>
         </p>
 
-        <p class="p-float-label mb-4" [ngClass]="{ 'p-focus': !!formMain?.get('userName')?.value }">
+        <p class="p-float-label mb-4" [ngClass]="{ 'p-focus': !!formMain.get('userName')?.value }">
           <input
             id="password"
             class="w-100 p-inputtext p-corner-all p-state-default p-widget"

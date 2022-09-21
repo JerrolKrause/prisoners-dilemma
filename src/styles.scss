@@ -4,38 +4,38 @@
 
 // Bootstrap
 // Option 1: Import only parts of Bootstrap - 99k
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/utilities';
-@import '~bootstrap/scss/utilities/api';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities';
+@import 'bootstrap/scss/utilities/api';
 
-@import '~bootstrap/scss/root';
-@import '~bootstrap/scss/reboot';
-@import '~bootstrap/scss/helpers';
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/helpers';
 
 // Components
-@import '~bootstrap/scss/buttons';
-@import '~bootstrap/scss/card';
-@import '~bootstrap/scss/containers';
-@import '~bootstrap/scss/grid';
-@import '~bootstrap/scss/nav';
-@import '~bootstrap/scss/navbar';
-@import '~bootstrap/scss/tables';
-@import '~bootstrap/scss/type';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/navbar';
+@import 'bootstrap/scss/tables';
+@import 'bootstrap/scss/type';
 
 // Option 2: Import all of Bootstrap - 154k
-// @import '~bootstrap/scss/bootstrap';
+// @import 'bootstrap/scss/bootstrap';
 
 // Font Awesome Free 5
-// @import '~@fortawesome/fontawesome-free/css/all.css'; // 57k
+// @import '@fortawesome/fontawesome-free/css/all.css'; // 57k
 
 // PrimeNG
-// @import '~primeicons/primeicons.css'; // 500k including font files
-@import '~primeng/resources/primeng.min.css'; // 7k
-// @import '~primeflex/primeflex.css'; // 236k
+// @import 'primeicons/primeicons.css'; // 500k including font files
+@import 'primeng/resources/primeng.min.css'; // 7k
+// @import 'primeflex/primeflex.css'; // 236k
 // Option 1: Pre-built PrimeNG theme
-@import '~primeng/resources/themes/nova/theme.css'; // 134k
+@import 'primeng/resources/themes/nova/theme.css'; // 134k
 // Option 2: Custom theme using PrimeNG Theme Designer
 // TODO: Update Theme Designer to support PrimeNG 11
 //@import 'styles/theme/nova-light/theme';
