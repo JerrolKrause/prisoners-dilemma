@@ -1,25 +1,26 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { NgModule } from '@angular/core';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 // Solid icons
 import {
-  faPowerOff,
-  faSpinner,
-  faExclamationTriangle,
-  faUser,
+  faBars,
+  faCaretDown,
   faCog,
   faCogs,
-  faTrash,
-  faUsers,
-  faCaretDown,
-  faBars,
-  faHome,
   faCubes,
-  faX,
-  faRefresh,
-  faPlus,
   faEnvelope,
+  faExclamationTriangle,
+  faHome,
   faPhone,
+  faPlus,
+  faPowerOff,
+  faRefresh,
+  faSpinner,
+  faTrash,
+  faUser,
+  faUsers,
+  faX,
+  fas,
 } from '@fortawesome/free-solid-svg-icons';
 // Regular (thinner) icons
 // import { faPowerOff } from '@fortawesome/free-regular-svg-icons';
@@ -45,6 +46,7 @@ import {
 })
 export class IconsModule {
   constructor(library: FaIconLibrary) {
+    library.addIconPacks(fas);
     library.addIcons(
       faPhone,
       faEnvelope,
