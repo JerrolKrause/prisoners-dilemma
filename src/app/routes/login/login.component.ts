@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Validators, NonNullableFormBuilder, FormControl } from '@angular/forms';
-import { DomService } from '@ntersol/services';
 import { AuthService, AuthState } from '$shared';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { FormControl, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DomService } from '@ntersol/services';
 
 interface LoginForm {
   userName: FormControl<string>;
@@ -22,15 +22,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     password: new FormControl('password', { validators: Validators.required, nonNullable: true }),
     remember: new FormControl(false, { nonNullable: true }),
   });
-  public waiting: boolean | undefined;
-  public errorApi: any | null | undefined;
-  public showErrorDetails = false;
+
+  public state = signal({
+    waiting: false,
+    error: null,
+    showErrorDetails: false,
+    loggedout: false,
+    showPassword: true,
+  });
 
   public authState$ = this.authService.authState$;
-  public authState = AuthState;
-
-  public loggedout: boolean | undefined;
-  public showPassword = false;
+  public authStateType = AuthState;
 
   constructor(
     private authService: AuthService,
@@ -57,9 +59,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    * Submit the form
    */
   public onLogin() {
-    this.waiting = true;
-    this.errorApi = null;
-    this.showErrorDetails = false;
+    this.state.update(state => ({ ...state, waiting: true, error: null, showErrorDetails: false }));
 
     // If remember username is set, save to localstorage
     if (this.formMain && this.formMain.value.remember) {
@@ -74,17 +74,16 @@ export class LoginComponent implements OnInit, OnDestroy {
         // get return url from route parameters or default to '/'
         const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         this.router.navigate([returnUrl]);
-        this.waiting = false;
+
+        this.state.update(state => ({ ...state, waiting: false }));
       },
       error => {
         error.errorMsg = 'Error logging in.';
         if ((error.statusText = 'Unauthorized')) {
           error.errorMsg = 'Invalid username or password, please try again.';
-          this.showErrorDetails = false;
+          this.state.update(state => ({ ...state, showErrorDetails: false }));
         }
-
-        this.errorApi = error;
-        this.waiting = false;
+        this.state.update(state => ({ ...state, error: error, waiting: false }));
       },
     );
   } // end onSubmit

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { environment } from '$env';
+import { Component, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -8,15 +9,13 @@ import { environment } from '$env';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit {
-  public isOpen = false;
+  public isOpen = signal(false);
   public appName = environment.properties.appName;
 
-  constructor(private router: Router) {}
-
-  public ngOnInit() {
+  constructor(private router: Router) {
     // On route change, close nav window
-    this.router.events.subscribe(() => {
-      this.isOpen = false;
-    });
+    this.router.events.pipe(takeUntilDestroyed()).subscribe(() => this.isOpen.set(false));
   }
+
+  public ngOnInit() {}
 }

@@ -31,16 +31,24 @@
 
   <!-- Toggle sidebar -->
   <div class="pt-2 float-end d-block d-lg-none">
-    <a (click)="sidebarVisible = !sidebarVisible" class="p-2">
+    <a (click)="sidebarVisible.set(true)" class="p-2">
       <fa-icon icon="bars" class="me-2 fa-lg"></fa-icon>
     </a>
   </div>
 
   <!--
   Flyout sidebar
--->
-  <p-sidebar [(visible)]="sidebarVisible" [style]="{ 'z-index': 10000 }" appendTo="body" [baseZIndex]="10000" [dismissible]="true" [showCloseIcon]="false">
-    <a (click)="sidebarVisible = !sidebarVisible" class="sidebar-close float-end">
+  -->
+  <p-sidebar
+    [visible]="sidebarVisible()"
+    (onHide)="sidebarVisible.set(false)"
+    [style]="{ 'z-index': 10000 }"
+    appendTo="body"
+    [baseZIndex]="10000"
+    [dismissible]="true"
+    [showCloseIcon]="false"
+  >
+    <a (click)="sidebarVisible.set(false)" class="sidebar-close float-end">
       <fa-icon icon="x"></fa-icon>
     </a>
 

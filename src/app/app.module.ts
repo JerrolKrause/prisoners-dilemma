@@ -1,18 +1,18 @@
 // @angular modules
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { enableProdMode, ErrorHandler, Injector, NgModule } from '@angular/core'; // APP_INITIALIZER,
-import { UrlSerializer } from '@angular/router';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ErrorHandler, Injector, NgModule, enableProdMode } from '@angular/core'; // APP_INITIALIZER,
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Uncomment for animation, needed by some prime components
+import { UrlSerializer } from '@angular/router';
+import { ScullyLibModule } from '@scullyio/ng-lib';
 import { ConfirmationService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { ScullyLibModule } from '@scullyio/ng-lib';
 // Main entrypoint component
 import { environment } from '$env';
+import { GlobalErrorHandler, HttpInterceptorService, TrailingSlashUrlSerializer, isBrowser } from '$shared';
 import { AppComponent } from './app.component';
 import { AppRouterModule } from './app.routes.module';
 import { ComponentsLazyLoad } from './components/components.lazy';
-import { isBrowser, HttpInterceptorService, GlobalErrorHandler, TrailingSlashUrlSerializer } from '$shared';
 
 // Enables faster prod mode, does disable some dirty error checking though
 if (environment.production) {
@@ -42,7 +42,7 @@ export let InjectorInstance: Injector;
   declarations: [APP_COMPONENTS],
   imports: [
     BrowserModule.withServerTransition({ appId: environment.appID }),
-    BrowserTransferStateModule,
+
     HttpClientModule,
     BrowserAnimationsModule, // Uncomment for animation, needed by some prime components
     ComponentsLazyLoad, // Lazy loaded modules on the global scope

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { merge, interval, BehaviorSubject, fromEvent, Observable } from 'rxjs';
+import { merge, interval, BehaviorSubject, fromEvent } from 'rxjs';
 import { throttleTime, tap, switchMap, filter, map, distinctUntilChanged, startWith, take } from 'rxjs/operators';
 import { DialogService } from 'primeng/dynamicdialog';
 import { environment } from '$env';
@@ -28,16 +28,47 @@ export class AuthService {
   public logOutModal: any | null | undefined;
 
   /** How often to refresh the token after user interaction */
-  private tokenRefreshInterval = 60 * 1000; // 60 seconds default, 60 * 1000
+  private tokenRefreshInterval = 60; // In seconds. 60 = 1 minute
   /** How long should the user be idle before loading the modal */
-  private idleDuration = 5 * 60 * 1000; // 5 minutes default, 5 * 60
+  private idleDuration = 60 * 5; // In seconds 60 * 5 = 5 minutes
+  /** How long will the log out modal will display before logging a user out automatically */
+  private logoutModalDuration = 60; // In seconds = 1 minute
+
   /** Is the current timer expired */
   private logoutModalVisible = false;
 
-  /** User interaction events. Watches mouse movement, clicks and key presses */
-  private refreshEvent$?: Observable<number | Event>;
+  /** User interaction events. Watches mouse movement, clicks, scroll and key presses. SSR safe */
+  private userActions$ = this.dom.document
+    ? merge(fromEvent(document, 'keypress'), fromEvent(document, 'mousemove'), fromEvent(document, 'click'), fromEvent(this.dom.document, 'scroll'))
+    : merge();
+
+  /** Throttle userActions  */
+  public refreshEvent$ = this.userActions$.pipe(
+    startWith(0),
+    throttleTime(1000, undefined, { leading: false, trailing: true }), // Throttle to every one second
+  );
+
   /** Logout timer that resets after every user interaction event */
-  private logoutTimerExpired$?: Observable<boolean>;
+  public logoutTimerExpired$ = this.refreshEvent$.pipe(
+    switchMap(() => interval(1000)), // Reset interval everytime refresh fires
+    map(val => (val > this.idleDuration ? true : false)), // If val is greater than duration, convert to true or false
+    startWith(false),
+    distinctUntilChanged(),
+    filter(expired => !!this.appStorage.token && expired && !this.logoutModalVisible), // Don't show if logout modal is already visible or no token
+    tap(() => this.launchLogoutModal()),
+  );
+
+  /** Refresh the token automatically */
+  public refreshToken$ = this.refreshEvent$.pipe(
+    // Throttle time using refresh interval
+    // Needs to be before filter to prevent duplicate calls when the logout modal fires or on login
+    throttleTime(this.tokenRefreshInterval * 1000, undefined, { leading: false, trailing: true }),
+    // Token refresh can only occur after refreshEvent$ is initialized
+    // Only capture refresh events if token present
+    // Only refresh token if timer not expired
+    filter(refreshEvent => !!refreshEvent && !!this.appStorage.token && !this.logoutModalVisible),
+    tap(() => this.refreshToken()), // Make refresh calls
+  );
 
   constructor(
     private http: HttpClient,
@@ -53,47 +84,6 @@ export class AuthService {
         this.appStorage.token = params['token'];
       }
     });
-
-    // Browser check
-    if (!this.dom.isBrowser) {
-      return;
-    }
-
-    // Start subs to DOM events
-    this.refreshEvent$ = merge(fromEvent(document, 'keypress'), fromEvent(document, 'mousemove'), fromEvent(document, 'click'))
-      .pipe(
-        throttleTime(1000), // Throttle to every one second
-        startWith(0),
-      )
-      .pipe();
-
-    this.logoutTimerExpired$ = this.refreshEvent$.pipe(
-      switchMap(() => interval(1000)), // Reset interval everytime refresh fires
-      // tap(val => console.log(val, this.idleDuration)), // Test auth functionality
-      filter(() => !!this.appStorage.token), // Only capture refresh events if token present
-      map(val => (val > this.idleDuration ? true : false)), // If val is greater than duration, convert to true or false
-      startWith(false),
-      distinctUntilChanged(),
-    );
-
-    // Manage logout timer
-    // Only fire events when timer expires and is not inactive (IE the logout modal is active)
-    this.logoutTimerExpired$.pipe(filter(expired => expired && !this.logoutModalVisible)).subscribe(() => {
-      this.launchLogoutModal();
-      this.logoutModalVisible = true;
-    });
-
-    // If an endpoint for auth refresh provided
-    if (environment.endpoints.authTokenRefresh) {
-      this.refreshEvent$
-        .pipe(
-          filter(refreshEvent => !!refreshEvent), // Token refresh can only occur after refreshEvent$ is initialized
-          filter(() => !!this.appStorage.token), // Only capture refresh events if token present
-          throttleTime(this.tokenRefreshInterval), // Throttle time using refresh interval
-          filter(() => !this.logoutModalVisible), // Only refresh token if timer not expired
-        )
-        .subscribe(() => this.refreshToken()); // Refresh token
-    }
   }
 
   /**
@@ -122,13 +112,15 @@ export class AuthService {
    * Refresh the token
    */
   public refreshToken() {
-    // Null check against env files
-    if (!environment.endpoints.apiUrl || !environment.endpoints.authTokenRefresh) {
-      return false;
-    }
-    const refreshApi = this.http.post<Models.Auth>(environment.endpoints.apiUrl + environment.endpoints.authLogin, {});
+    const authApi =
+      environment.endpoints.apiUrl && environment.endpoints.authTokenRefresh
+        ? this.http.post<Models.Auth>(environment.endpoints.apiUrl + environment.endpoints.authTokenRefresh, {})
+        : // Stub refresh API
+          this.http
+            .post<Models.Auth>('https://jsonplaceholder.typicode.com/posts/', {})
+            .pipe(map(() => ({ data: { token: '12345', userGuid: '12345' }, success: true, meta: {} } as Models.Auth)));
 
-    refreshApi.subscribe(
+    authApi.subscribe(
       response => {
         if (this.appStorage.token) {
           // Make sure a token is present before it is replaced
@@ -139,16 +131,17 @@ export class AuthService {
       () => this.logOut(AuthState.sessionExpired),
     );
     // Return observable if needed by a component
-    return refreshApi;
+    return authApi;
   } // end RefreshToken
 
   /**
    * Launch a modal window which gives the user a chance to continue working
    */
-  private launchLogoutModal(): void {
+  public launchLogoutModal(): void {
+    this.logoutModalVisible = true;
     // Open log out modal window
     const ref = this.dialogService.open(LogoutModalComponent, {
-      data: 60,
+      data: this.logoutModalDuration,
       header: 'Warning',
       width: '70%',
       dismissableMask: true,
@@ -158,9 +151,9 @@ export class AuthService {
       if (reason) {
         this.logOut(AuthState.loggedOut);
       } else {
-        this.logoutModalVisible = false;
         this.refreshToken(); // Immediately refresh token
       }
+      this.logoutModalVisible = false;
     });
   }
 

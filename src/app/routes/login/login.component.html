@@ -6,12 +6,18 @@
       <h1><fa-icon icon="user"></fa-icon> Please sign in</h1>
       <p-card>
         <!-- Logout and session expired messages -->
-        <ng-container *ngIf="authState$ | async as state">
-          <p-message severity="warn" styleClass="w-100 mb-3" text="Session expired, please log in again" *ngIf="state === authState.sessionExpired"></p-message>
-          <p-message severity="success" styleClass="w-100 mb-3" text="You have successfully logged out" *ngIf="state === authState.loggedOut"> </p-message>
+        <ng-container *ngIf="authState$ | async as authState">
+          <p-message
+            severity="warn"
+            styleClass="w-100 mb-3"
+            text="Session expired, please log in again"
+            *ngIf="authState === authStateType.sessionExpired"
+          ></p-message>
+          <p-message severity="success" styleClass="w-100 mb-3" text="You have successfully logged out" *ngIf="authState === authStateType.loggedOut">
+          </p-message>
         </ng-container>
         <!-- Login failure -->
-        <p-message severity="error" text="Unable to log in, please check your username and password" *ngIf="errorApi"> </p-message>
+        <p-message severity="error" text="Unable to log in, please check your username and password" *ngIf="state().error"> </p-message>
 
         <p class="mb-4">Please enter your username and password.</p>
 
@@ -39,7 +45,7 @@
 
         <p-footer>
           <div class="text-end">
-            <button type="submit" class="btn btn-primary" [disabled]="formMain.invalid || waiting" [ngClass]="{ 'btn-waiting': waiting }">
+            <button type="submit" class="btn btn-primary" [disabled]="formMain.invalid || state().waiting" [ngClass]="{ 'btn-waiting': state().waiting }">
               <fa-icon icon="power-off" class="me-2"></fa-icon> Sign In
             </button>
           </div>

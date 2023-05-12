@@ -1,6 +1,6 @@
 <p>
   Your session is about to expire in
-  <span id="the_time">{{ counter }}</span> seconds, do you want to continue working?
+  <span id="the_time">{{ logoutTimer$ | async }}</span> seconds, do you want to continue working?
 </p>
 
 <div class="p-dialog-footer p-widget-content ng-tns-c7-3 ng-star-inserted">

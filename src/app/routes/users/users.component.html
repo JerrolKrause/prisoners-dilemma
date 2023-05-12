@@ -1,5 +1,5 @@
 <app-masterpage>
-  <div class="container mt-3" *ngIf="users.state$ | async as state">
+  <div class="container mt-3" *ngIf="api.users.state$ | async as state">
     <div class="row">
       <div class="col col-12 col-md-9">
         <a class="float-end" (click)="refresh()"><fa-icon icon="refresh"></fa-icon></a>
@@ -48,9 +48,9 @@
       <div class="col col-12 col-md-3">
         <div class="card mb-3">
           <div class="card-body">
-            <a class="float-end" (click)="editUndo()" *ngIf="isEdit">Undo</a>
-            <h3 *ngIf="isEdit">Edit existing user</h3>
-            <h3 *ngIf="!isEdit">Add a new user</h3>
+            <a class="float-end" (click)="editUndo()" *ngIf="isEdit()">Undo</a>
+            <h3 *ngIf="isEdit()">Edit existing user</h3>
+            <h3 *ngIf="!isEdit()">Add a new user</h3>
             <hr class="mb-4" />
             <form [formGroup]="userForm">
               <p class="mb-4">
@@ -72,8 +72,8 @@
                 </span>
               </p>
               <div class="float-end">
-                <button class="btn btn-primary" [disabled]="state.modifying" *ngIf="isEdit" (click)="save()"><fa-icon icon="cog"></fa-icon> Save User</button>
-                <button class="btn btn-primary" [disabled]="state.modifying" *ngIf="!isEdit" (click)="save()">
+                <button class="btn btn-primary" [disabled]="state.modifying" *ngIf="isEdit()" (click)="save()"><fa-icon icon="cog"></fa-icon> Save User</button>
+                <button class="btn btn-primary" [disabled]="state.modifying" *ngIf="!isEdit()" (click)="save()">
                   <fa-icon icon="plus"></fa-icon> Create User
                 </button>
               </div>

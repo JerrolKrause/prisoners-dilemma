@@ -4,15 +4,8 @@
 
 // Bootstrap
 // Option 1: Import only parts of Bootstrap - 99k
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/utilities';
-@import 'bootstrap/scss/utilities/api';
-
-@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/bootstrap-utilities';
 @import 'bootstrap/scss/reboot';
-@import 'bootstrap/scss/helpers';
 
 // Components
 @import 'bootstrap/scss/buttons';
@@ -27,7 +20,7 @@
 // Option 2: Import all of Bootstrap - 154k
 // @import 'bootstrap/scss/bootstrap';
 
-// Font Awesome Free 5
+// Font Awesome Free 5. Use the icons.module instead unless you need them all
 // @import '@fortawesome/fontawesome-free/css/all.css'; // 57k
 
 // PrimeNG

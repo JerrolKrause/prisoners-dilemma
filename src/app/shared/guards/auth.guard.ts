@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+
 import { AuthService, AuthState, AppStorageService } from '$shared';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard  {
   constructor(private appStorage: AppStorageService, private auth: AuthService) {}
 
   canActivate() {

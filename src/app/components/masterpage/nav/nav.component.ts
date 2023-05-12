@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, signal } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { AppStorageService, AuthService, AuthState, UiStateService } from '$shared';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface MainMenuItem {
@@ -14,7 +14,6 @@ interface MainMenuItem {
   command?: () => any;
 }
 
-@UntilDestroy()
 @Component({
   selector: 'app-nav',
   styleUrls: ['./nav.component.scss'],
@@ -48,19 +47,25 @@ export class NavComponent implements OnInit, OnDestroy {
     },
   ];
 
-  public sidebarVisible = false;
-  public dropDownMenuVisible = false;
+  public sidebarVisible = signal(false);
 
-  constructor(private appStorage: AppStorageService, private ui: UiStateService, private router: Router, private auth: AuthService) {}
-
-  ngOnInit(): void {
+  constructor(private appStorage: AppStorageService, private ui: UiStateService, private router: Router, private auth: AuthService) {
     // On route change, if mobile nav is open close it
     this.router.events
       .pipe(
-        untilDestroyed(this),
+        takeUntilDestroyed(),
         filter(event => event instanceof NavigationEnd),
       )
-      .subscribe(() => (this.sidebarVisible = false));
+      .subscribe(() => this.sidebarVisible.set(false));
+  }
+
+  ngOnInit(): void {}
+
+  /**
+   * Toggle sidebar
+   */
+  public toggleSidebar() {
+    this.sidebarVisible.update(v => !v);
   }
 
   /**
