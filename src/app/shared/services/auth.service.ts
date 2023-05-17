@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { merge, interval, BehaviorSubject, fromEvent } from 'rxjs';
-import { throttleTime, tap, switchMap, filter, map, distinctUntilChanged, startWith, take } from 'rxjs/operators';
-import { DialogService } from 'primeng/dynamicdialog';
 import { environment } from '$env';
-import { Models } from '../models/global.models';
-import { LogoutModalComponent } from '../../components/modals';
-import { AppStorageService } from './app-storage.service';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomService } from '@ntersol/services';
+import { DialogService } from 'primeng/dynamicdialog';
+import { BehaviorSubject, fromEvent, interval, merge } from 'rxjs';
+import { distinctUntilChanged, filter, map, startWith, switchMap, take, tap, throttleTime } from 'rxjs/operators';
+import { LogoutModalComponent } from '../../components/modals';
+import { Models } from '../models/global.models';
+import { AppStorageService } from './app-storage.service';
 
 export enum AuthState {
   initial,
@@ -38,9 +38,10 @@ export class AuthService {
   private logoutModalVisible = false;
 
   /** User interaction events. Watches mouse movement, clicks, scroll and key presses. SSR safe */
-  private userActions$ = this.dom.document
-    ? merge(fromEvent(document, 'keypress'), fromEvent(document, 'mousemove'), fromEvent(document, 'click'), fromEvent(this.dom.document, 'scroll'))
-    : merge();
+  private userActions$ =
+    this.dom.isBrowser && this.dom.document
+      ? merge(fromEvent(document, 'keypress'), fromEvent(document, 'mousemove'), fromEvent(document, 'click'), fromEvent(this.dom.document, 'scroll'))
+      : merge();
 
   /** Throttle userActions  */
   public refreshEvent$ = this.userActions$.pipe(

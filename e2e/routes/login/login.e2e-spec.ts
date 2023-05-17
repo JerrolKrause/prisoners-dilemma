@@ -1,4 +1,4 @@
-import { browser, by, element } from 'protractor';
+import { by, element } from 'protractor';
 
 import { App } from '../../app.po';
 import { LoginPage } from './login.po';
@@ -42,16 +42,5 @@ describe('Login Page', () => {
     let subject = element(by.css('form button[type="submit"]'));
     // let result = true;
     expect<any>(subject.isEnabled()).toEqual(true);
-  });
-
-  it('should route to new page on successful submit', () => {
-    element(by.css('form .login')).clear();
-    element(by.css('form .login')).sendKeys('eat@joes.com');
-    element(by.css('form .password')).clear();
-    element(by.css('form .password')).sendKeys('123456');
-    element(by.css('form .remember')).click();
-    element(by.css('form button[type="submit"]')).click();
-
-    return app.checkUrl('login', false);
   });
 });

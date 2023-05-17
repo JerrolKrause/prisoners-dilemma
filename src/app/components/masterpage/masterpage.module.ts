@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { SharedModule } from '$shared';
-import { LogoutModalComponent, FeedbackModalComponent } from '../modals';
-import { FooterComponent, HeaderComponent, MasterpageComponent, NavComponent, LayoutSingleComponent } from './';
+import { FeedbackModalComponent, LogoutModalComponent } from '../modals';
+import { FooterComponent, HeaderComponent, LayoutSingleComponent, MasterpageComponent, NavComponent } from './';
 
-import { SidebarModule } from 'primeng/sidebar';
 import { ConfirmationService } from 'primeng/api';
-import { IconsModule } from '../icons/icons.module';
+import { SidebarModule } from 'primeng/sidebar';
+import { IconsComponent } from '../icons/icons.component';
 
 // Modals include
 const APP_MODALS = [LogoutModalComponent, FeedbackModalComponent];
@@ -22,7 +22,7 @@ export const APP_COMPONENTS = [...APP_MODALS, FooterComponent, HeaderComponent, 
     // Shared
     SharedModule,
     SidebarModule,
-    IconsModule,
+    IconsComponent,
   ],
   providers: [ConfirmationService],
   declarations: [APP_COMPONENTS],

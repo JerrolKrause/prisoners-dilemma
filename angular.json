@@ -15,9 +15,9 @@
             "outputPath": "dist/browser",
             "index": "./src/index.html",
             "main": "./src/main.ts",
-            "tsConfig": "./src/tsconfig.app.json",
+            "tsConfig": "./tsconfig.app.json",
             "preserveSymlinks": true,
-            "polyfills": "./src/polyfills.ts",
+            "polyfills": ["zone.js"],
             "assets": ["./src/assets", "./src/favicon.ico", "./src/apple-touch-icon.png", "./src/safari-pinned-tab.svg", "./src/manifest.webmanifest"],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles/globals"]
@@ -142,41 +142,37 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["./src/tsconfig.app.json", "./src/tsconfig.spec.json"],
+            "tsConfig": ["./tsconfig.app.json", "./tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
-            "tsConfig": "./src/tsconfig.spec.json"
+            "tsConfig": "./tsconfig.spec.json"
           }
         },
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "dist/server",
-            "main": "./server.ts",
-            "tsConfig": "./src/tsconfig.server.json"
+            "main": "server.ts",
+            "tsConfig": "./tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
           },
           "configurations": {
             "production": {
-              "outputHashing": "media",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ]
+              "outputHashing": "media"
             },
             "development": {
+              "buildOptimizer": false,
               "optimization": false,
               "sourceMap": true,
               "extractLicenses": false,
-              "vendorChunk": true,
-              "buildOptimizer": false
+              "vendorChunk": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",
@@ -208,6 +204,21 @@
             }
           },
           "defaultConfiguration": "production"
+        },
+        "deploy-ssr": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {},
+          "configurations": {
+            "production": {
+              "browserTarget": "angular-starter:build:production",
+              "serverTarget": "angular-starter:server:production"
+            },
+            "development": {
+              "browserTarget": "angular-starter:build:development",
+              "serverTarget": "angular-starter:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     },
@@ -221,7 +232,7 @@
           "options": {
             "outputPath": "dist/server",
             "main": "src/main.server.ts",
-            "tsConfig": "src/tsconfig.server.json"
+            "tsConfig": "./tsconfig.server.json"
           }
         },
         "e2e": {
@@ -254,8 +265,6 @@
 
   "cli": {
     "analytics": false,
-    "schematicCollections": [
-      "@ntersol/schematics"
-    ]
+    "schematicCollections": ["@ntersol/schematics"]
   }
 }

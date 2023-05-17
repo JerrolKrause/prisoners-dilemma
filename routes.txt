@@ -1,3 +1,6 @@
+/
+/login
+/users
 /users/1
 /users/2
 /users/3

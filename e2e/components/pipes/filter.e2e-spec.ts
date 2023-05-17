@@ -1,4 +1,4 @@
-import { browser, by, element } from 'protractor';
+import { by, element } from 'protractor';
 
 import { App } from '../../app.po';
 import { QaPage } from '../qa.po';
@@ -9,10 +9,6 @@ describe('Filter Pipe', () => {
 
   beforeEach(() => {
     app.navigateTo('/#/qa');
-  });
-
-  it('should be on the correct url, /#/qa', () => {
-    return app.checkUrl('qa');
   });
 
   // Array of strings

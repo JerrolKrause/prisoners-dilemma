@@ -6,12 +6,12 @@
       [routerLink]="nav.routerLink ? [nav.routerLink] : null"
       (click)="nav.command ? nav.command() : null"
     >
-      <fa-icon [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></fa-icon> <span [innerHtml]="nav.label"></span>
+      <app-icons [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></app-icons> <span [innerHtml]="nav.label"></span>
     </a>
     <div class="menu-container align-self-center ms-auto" #temp>
       <a label="Show" class="menu-bar-toggle">
-        <fa-icon icon="user" class="me-2"></fa-icon> <span class="me-2" *ngIf="user$ | async as user">{{ user.name }}</span>
-        <fa-icon icon="caret-down" class="icon-caret-down"></fa-icon>
+        <app-icons icon="user" class="me-2"></app-icons> <span class="me-2" *ngIf="user$ | async as user">{{ user.name }}</span>
+        <app-icons icon="caret-down" class="icon-caret-down"></app-icons>
       </a>
       <div class="menu-bar">
         <div class="menu-bar-container">
@@ -21,7 +21,7 @@
             [routerLink]="nav.routerLink ? [nav.routerLink] : null"
             (click)="nav.command ? nav.command() : null"
           >
-            <fa-icon [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></fa-icon>
+            <app-icons [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></app-icons>
             <span [innerHtml]="nav.label"></span>
           </a>
         </div>
@@ -32,7 +32,7 @@
   <!-- Toggle sidebar -->
   <div class="pt-2 float-end d-block d-lg-none">
     <a (click)="sidebarVisible.set(true)" class="p-2">
-      <fa-icon icon="bars" class="me-2 fa-lg"></fa-icon>
+      <app-icons icon="bars" class="me-2 fa-lg"></app-icons>
     </a>
   </div>
 
@@ -49,15 +49,15 @@
     [showCloseIcon]="false"
   >
     <a (click)="sidebarVisible.set(false)" class="sidebar-close float-end">
-      <fa-icon icon="x"></fa-icon>
+      <app-icons icon="x"></app-icons>
     </a>
 
     <a class="nav-menu-link main-menu d-block" *ngFor="let nav of navMenu" [routerLink]="[nav.routerLink]">
-      <fa-icon [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></fa-icon> <span [innerHtml]="nav.label"></span>
+      <app-icons [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></app-icons> <span [innerHtml]="nav.label"></span>
     </a>
     <hr />
     <a class="nav-menu-link main-menu d-block" *ngFor="let nav of utilityMenu" [routerLink]="[nav.routerLink]">
-      <fa-icon [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></fa-icon>
+      <app-icons [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></app-icons>
       <span [innerHtml]="nav.label"></span>
     </a>
   </p-sidebar>

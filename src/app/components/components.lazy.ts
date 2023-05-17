@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   // App global components
@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '~',
-    loadChildren: () => import('./icons/icons.module').then(m => m.IconsModule),
+    loadChildren: () => import('./icons/icons.component').then(m => m.IconsComponent),
   },
   // Angular libs
   {

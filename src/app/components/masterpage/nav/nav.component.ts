@@ -4,11 +4,10 @@ import { filter } from 'rxjs/operators';
 
 import { AppStorageService, AuthService, AuthState, UiStateService } from '$shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-
+import { AvailableIcons } from '../../icons/icons.component';
 interface MainMenuItem {
   label: string;
-  icon?: IconProp;
+  icon?: AvailableIcons;
   routerLink?: string;
   routerLinkActiveOptions?: any;
   command?: () => any;

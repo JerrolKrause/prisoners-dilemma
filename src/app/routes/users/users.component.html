@@ -2,8 +2,8 @@
   <div class="container mt-3" *ngIf="api.users.state$ | async as state">
     <div class="row">
       <div class="col col-12 col-md-9">
-        <a class="float-end" (click)="refresh()"><fa-icon icon="refresh"></fa-icon></a>
-        <h1><fa-icon icon="users"></fa-icon> List of users ({{ state?.data?.length ?? 0 }})</h1>
+        <a class="float-end" (click)="refresh()"><app-icons icon="refresh"></app-icons></a>
+        <h1><app-icons icon="users"></app-icons> List of users ({{ state?.data?.length ?? 0 }})</h1>
         <div class="card">
           <div class="card-body">
             <nts-api-state [state]="state">
@@ -30,8 +30,8 @@
                       </td>
                       <td>
                         <div class="text-end">
-                          <a class="me-3" (click)="edit(user)"><fa-icon icon="cog"></fa-icon></a>
-                          <a (click)="delete(user)"><fa-icon icon="trash"></fa-icon></a>
+                          <a class="me-3" (click)="edit(user)"><app-icons icon="cog"></app-icons></a>
+                          <a (click)="delete(user)"><app-icons icon="trash"></app-icons></a>
                         </div>
                       </td>
                     </tr>
@@ -72,9 +72,11 @@
                 </span>
               </p>
               <div class="float-end">
-                <button class="btn btn-primary" [disabled]="state.modifying" *ngIf="isEdit()" (click)="save()"><fa-icon icon="cog"></fa-icon> Save User</button>
+                <button class="btn btn-primary" [disabled]="state.modifying" *ngIf="isEdit()" (click)="save()">
+                  <app-icons icon="cog"></app-icons> Save User
+                </button>
                 <button class="btn btn-primary" [disabled]="state.modifying" *ngIf="!isEdit()" (click)="save()">
-                  <fa-icon icon="plus"></fa-icon> Create User
+                  <app-icons icon="plus"></app-icons> Create User
                 </button>
               </div>
             </form>

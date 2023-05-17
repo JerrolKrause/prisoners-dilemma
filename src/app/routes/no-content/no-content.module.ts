@@ -1,10 +1,10 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { IconsComponent, MasterPageModule } from '$components';
 import { SharedModule } from '$shared';
-import { IconsModule, MasterPageModule } from '$components';
-import { NoContentComponent } from './no-content.component';
+import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HomeModule } from '../home';
+import { NoContentComponent } from './no-content.component';
 
 export const routing: ModuleWithProviders<HomeModule> = RouterModule.forChild([
   {
@@ -14,7 +14,7 @@ export const routing: ModuleWithProviders<HomeModule> = RouterModule.forChild([
 ]);
 
 @NgModule({
-  imports: [CommonModule, SharedModule, MasterPageModule, IconsModule, routing],
+  imports: [CommonModule, SharedModule, MasterPageModule, IconsComponent, routing],
   declarations: [NoContentComponent],
   providers: [],
   exports: [],

@@ -1,7 +1,8 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 
 import { environment } from '$env';
-import { AppStorageService, isBrowser } from '$shared';
+import { isBrowser } from '$shared';
+import { DomService } from '@ntersol/services';
 
 interface AngularError {
   promise: any;
@@ -24,7 +25,7 @@ interface LogError {
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  constructor(private appStorage: AppStorageService) {}
+  constructor(private dom: DomService) {}
 
   // Custom error handler for application/angular errors
   // Uses plain JS to eliminate any dependencies that may not be available due to the error
@@ -58,9 +59,9 @@ export class GlobalErrorHandler implements ErrorHandler {
     }
     console.error({ error: error });
     // const resetAction = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    window.location.href = '/login';
+    this.dom?.localStorage?.clear();
+    this.dom?.sessionStorage?.clear();
+    // this.dom?.window?.location.href = '/login';
     // };
     // If serviceworker is enabled, remove it first befire executing reset action, otherwise just reset
     // this.sw.isEnabled ? this.sw.remove() : resetAction();
