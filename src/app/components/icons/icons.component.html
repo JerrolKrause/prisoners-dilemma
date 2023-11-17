@@ -1,3 +1,3 @@
-<ng-container *ngIf="icon">
-  <fa-icon [icon]="iconMap[icon]"></fa-icon>
-</ng-container>
+@if (icon) {
+<fa-icon [icon]="iconMap[icon]"></fa-icon>
+}

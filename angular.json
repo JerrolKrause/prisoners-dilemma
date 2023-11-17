@@ -120,15 +120,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-starter:build",
-            "port": 4200
+            "port": 4200,
+            "buildTarget": "angular-starter:build"
           },
           "configurations": {
             "development": {
-              "browserTarget": "angular-starter:build:development"
+              "buildTarget": "angular-starter:build:development"
             },
             "production": {
-              "browserTarget": "angular-starter:build:production"
+              "buildTarget": "angular-starter:build:production"
             }
           },
           "defaultConfiguration": "development"
@@ -136,7 +136,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-starter:build"
+            "buildTarget": "angular-starter:build"
           }
         },
         "lint": {
@@ -175,7 +175,7 @@
           "defaultConfiguration": "production"
         },
         "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
           "configurations": {
             "development": {
               "browserTarget": "angular-starter:build:development",
@@ -189,7 +189,7 @@
           "defaultConfiguration": "development"
         },
         "prerender": {
-          "builder": "@nguniversal/builders:prerender",
+          "builder": "@angular-devkit/build-angular:prerender",
           "options": {
             "routes": ["/"]
           },
@@ -206,7 +206,7 @@
           "defaultConfiguration": "production"
         },
         "deploy-ssr": {
-          "builder": "@nguniversal/builders:prerender",
+          "builder": "@angular-devkit/build-angular:prerender",
           "options": {},
           "configurations": {
             "production": {

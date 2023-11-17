@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, makeStateKey, TransferState } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthService, AuthState, isNode, AppStorageService } from '$shared';
-import { makeStateKey, TransferState } from '@angular/platform-browser';
+
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {

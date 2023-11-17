@@ -1,29 +1,29 @@
 <div id="nav">
   <div class="d-none d-lg-flex">
-    <a
-      class="nav-menu-link main-menu"
-      *ngFor="let nav of navMenu"
-      [routerLink]="nav.routerLink ? [nav.routerLink] : null"
-      (click)="nav.command ? nav.command() : null"
-    >
-      <app-icons [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></app-icons> <span [innerHtml]="nav.label"></span>
+    @for (nav of navMenu; track nav) {
+    <a class="nav-menu-link main-menu" [routerLink]="nav.routerLink ? [nav.routerLink] : null" (click)="nav.command ? nav.command() : null">
+      @if (!!nav.icon) {
+      <app-icons [icon]="nav?.icon || 'question'" class="me-2"></app-icons>
+      } <span [innerHtml]="nav.label"></span>
     </a>
+    }
     <div class="menu-container align-self-center ms-auto" #temp>
       <a label="Show" class="menu-bar-toggle">
-        <app-icons icon="user" class="me-2"></app-icons> <span class="me-2" *ngIf="user$ | async as user">{{ user.name }}</span>
+        <app-icons icon="user" class="me-2"></app-icons> @if (user$ | async; as user) {
+        <span class="me-2">{{ user.name }}</span>
+        }
         <app-icons icon="caret-down" class="icon-caret-down"></app-icons>
       </a>
       <div class="menu-bar">
         <div class="menu-bar-container">
-          <a
-            class="nav-menu-link main-menu d-block thin"
-            *ngFor="let nav of utilityMenu"
-            [routerLink]="nav.routerLink ? [nav.routerLink] : null"
-            (click)="nav.command ? nav.command() : null"
-          >
-            <app-icons [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></app-icons>
+          @for (nav of utilityMenu; track nav) {
+          <a class="nav-menu-link main-menu d-block thin" [routerLink]="nav.routerLink ? [nav.routerLink] : null" (click)="nav.command ? nav.command() : null">
+            @if (!!nav.icon) {
+            <app-icons [icon]="nav?.icon || 'question'" class="me-2"></app-icons>
+            }
             <span [innerHtml]="nav.label"></span>
           </a>
+          }
         </div>
       </div>
     </div>
@@ -52,13 +52,21 @@
       <app-icons icon="x"></app-icons>
     </a>
 
-    <a class="nav-menu-link main-menu d-block" *ngFor="let nav of navMenu" [routerLink]="[nav.routerLink]">
-      <app-icons [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></app-icons> <span [innerHtml]="nav.label"></span>
+    @for (nav of navMenu; track nav) {
+    <a class="nav-menu-link main-menu d-block" [routerLink]="[nav.routerLink]">
+      @if (!!nav.icon) {
+      <app-icons [icon]="nav?.icon || 'question'" class="me-2"></app-icons>
+      } <span [innerHtml]="nav.label"></span>
     </a>
+    }
     <hr />
-    <a class="nav-menu-link main-menu d-block" *ngFor="let nav of utilityMenu" [routerLink]="[nav.routerLink]">
-      <app-icons [icon]="nav?.icon || 'question'" *ngIf="!!nav.icon" class="me-2"></app-icons>
+    @for (nav of utilityMenu; track nav) {
+    <a class="nav-menu-link main-menu d-block" [routerLink]="[nav.routerLink]">
+      @if (!!nav.icon) {
+      <app-icons [icon]="nav?.icon || 'question'" class="me-2"></app-icons>
+      }
       <span [innerHtml]="nav.label"></span>
     </a>
+    }
   </p-sidebar>
 </div>
