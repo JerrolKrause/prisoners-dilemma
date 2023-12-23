@@ -1,11 +1,25 @@
 <app-masterpage>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col col-12 col-md-9">
-        <p>Write cool code</p>
+  <div class="container-fluid" *ngIf="gameState$ | async as gameState">
+    <button class="btn" (click)="startGame()">Run Game</button>
+    <div class="results">
+      <div class="playerA">
+        <!-- Player 1 Results -->
+        <div
+          class="strategy"
+          [ngClass]="{
+            defect: result === strategy.defect
+          }"
+          *ngFor="let result of gameState.playerHistory[0]"
+        ></div>
       </div>
-      <div class="col col-12 col-md-3">
-        <p>Sidebar stuff</p>
+      <div class="playerB">
+        <div
+          class="strategy"
+          [ngClass]="{
+            defect: result === strategy.defect
+          }"
+          *ngFor="let result of gameState.playerHistory[1]"
+        ></div>
       </div>
     </div>
   </div>

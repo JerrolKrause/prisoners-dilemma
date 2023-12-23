@@ -7,6 +7,26 @@
  *
  */
 export module Models {
+  export enum Strategy {
+    defect,
+    coop,
+  }
+
+  export interface Player {
+    playerName: string;
+    fn: (gameState: Models.GameState, opponentNum: number) => Strategy;
+  }
+
+  export interface Scoring {
+    players: Record<string, string>;
+  }
+
+  export interface GameState {
+    round: number;
+    playerHistory: Strategy[][];
+    score: number[];
+  }
+
   export interface Auth {
     data: {
       userGuid: string;
@@ -23,15 +43,8 @@ export module Models {
     name?: string;
     username: string;
     email?: string;
-    favColor?: Color;
     website?: string;
     phone?: string;
-  }
-
-  export enum Color {
-    red,
-    blue,
-    orange,
   }
 }
 

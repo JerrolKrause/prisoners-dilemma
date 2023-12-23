@@ -1,3 +1,14 @@
 :host {
   display: block;
 }
+.results {
+}
+.strategy {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  background: green;
+  &.defect {
+    background: red;
+  }
+}
