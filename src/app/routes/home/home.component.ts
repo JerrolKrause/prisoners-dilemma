@@ -23,9 +23,14 @@ const initialGameState: Models.GameState = {
 export class HomeComponent implements OnInit, OnDestroy {
   public strategy = Models.Strategy;
 
-  public settingsForm = this.fb.group({
-    gamesCount: [1],
-    roundsPerGame: [200],
+  public settingsForm = this.fb.group<Models.Settings>({
+    gamesCount: 1,
+    roundsPerGame: 200,
+    // Points
+    pointsForBothCoop: 3,
+    pointsForBothDefect: 1,
+    pointsForOneDefect: 5,
+    pointsForOneCoop: 0,
   });
 
   public gameState$ = new BehaviorSubject(initialGameState);
@@ -84,6 +89,8 @@ export class HomeComponent implements OnInit, OnDestroy {
    *
    */
   public startGame() {
+    const settings: Models.Settings = this.settingsForm.value;
+    console.warn(settings);
     for (let index = 0; index < this.players.length; index++) {
       for (let index2 = index; index2 < this.players.length; index2++) {
         const currentPlayer = this.players[index];
@@ -92,7 +99,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           break;
         }
 
-        const results = this.faceOff(currentPlayer, nextPlayer);
+        const results = this.faceOff(currentPlayer, nextPlayer, settings);
 
         console.log(currentPlayer.playerName, 'vs', nextPlayer.playerName, ' | Score: ', results.score);
         this.playerScore[currentPlayer.playerName] += results.score[0];
@@ -108,37 +115,38 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param player2
    * @returns
    */
-  public faceOff(player1: Models.Player, player2: Models.Player) {
+  public faceOff(player1: Models.Player, player2: Models.Player, settings: Models.Settings) {
     const gameState: Models.GameState = {
       round: 0,
       playerHistory: [[], []],
       score: [0, 0],
     };
     const result = [];
-    for (let index = 0; index < 20; index++) {
+
+    for (let index = 0; index < (settings.roundsPerGame ?? 200); index++) {
       const playerADecision = player1.fn(gameState, 1);
       const playerBDecision = player2.fn(gameState, 0);
 
       // Scoring
       if (playerADecision === Models.Strategy.coop && playerBDecision === Models.Strategy.coop) {
         // Both players cooperate
-        gameState.score[0] += 3;
-        gameState.score[1] += 3;
+        gameState.score[0] += settings.pointsForBothCoop ?? 3;
+        gameState.score[1] += settings.pointsForBothCoop ?? 3;
         result.push(['Both Coop', ...gameState.score]);
       } else if (playerADecision === Models.Strategy.defect && playerBDecision === Models.Strategy.defect) {
         // Both players defect
-        gameState.score[0] += 1;
-        gameState.score[1] += 1;
+        gameState.score[0] += settings.pointsForBothDefect ?? 1;
+        gameState.score[1] += settings.pointsForBothDefect ?? 1;
         result.push(['Both Defect', ...gameState.score]);
       } else if (playerADecision === Models.Strategy.coop && playerBDecision === Models.Strategy.defect) {
         // Player A coops, Player B defects
-        gameState.score[0] += 0;
-        gameState.score[1] += 5;
+        gameState.score[0] += settings.pointsForOneCoop ?? 0;
+        gameState.score[1] += settings.pointsForOneDefect ?? 5;
         result.push(['Player 1 Coops, Player 2 Defects', ...gameState.score]);
       } else if (playerADecision === Models.Strategy.defect && playerBDecision === Models.Strategy.coop) {
         // Player A defects, Player B coops
-        gameState.score[0] += 5;
-        gameState.score[1] += 0;
+        gameState.score[0] += settings.pointsForOneDefect ?? 5;
+        gameState.score[1] += settings.pointsForOneCoop ?? 0;
         result.push(['Player 1 Defects, Player 2 Coops', ...gameState.score]);
       } else {
         console.error('Unknown condition');

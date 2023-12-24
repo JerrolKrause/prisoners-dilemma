@@ -2,14 +2,35 @@
   <div class="container-fluid" *ngIf="gameState$ | async as gameState">
     <div class="settings">
       <form [formGroup]="settingsForm">
-        <p>
-          # Of Games<br />
-          <input class="p-input" formControlName="gamesCount" />
-        </p>
-        <p>
-          Rounds Per Game<br />
-          <input class="p-input" formControlName="roundsPerGame" />
-        </p>
+        <div class="row">
+          <div class="col col-12 col-md-4">
+            <p>
+              # Of Games<br />
+              <input type="number" class="p-input" formControlName="gamesCount" />
+            </p>
+            <p>
+              Rounds Per Game<br />
+              <input type="number" class="p-input" formControlName="roundsPerGame" />
+            </p>
+          </div>
+          <div class="col col-12 col-md-4">
+            <p>
+              Score for mutual cooperation<br />
+              <input type="number" class="p-input" formControlName="pointsForBothCoop" />
+            </p>
+            <p>
+              Score for mutual defection<br />
+              <input type="number" class="p-input" formControlName="pointsForBothDefect" />
+            </p>
+            <div class="mb-3">
+              Scores for single defection<br />
+              <div class="d-inline-block" style="min-width: 100px">Defector:</div>
+              <input type="number" class="p-input" formControlName="pointsForOneDefect" /><br />
+              <div class="d-inline-block" style="min-width: 100px">Coop:</div>
+              <input type="number" class="p-input" formControlName="pointsForOneCoop" /><br />
+            </div>
+          </div>
+        </div>
       </form>
     </div>
     <hr />

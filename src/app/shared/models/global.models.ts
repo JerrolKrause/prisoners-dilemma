@@ -18,7 +18,22 @@ export module Models {
   }
 
   export interface Scoring {
-    players: Record<string, string>;
+    players: {
+      [index: string]: {
+        gamesWon: number;
+        finalScore: number;
+      };
+    };
+  }
+
+  export interface Settings {
+    gamesCount?: number | null;
+    roundsPerGame?: number | null;
+    // Points
+    pointsForBothCoop?: number | null;
+    pointsForBothDefect?: number | null;
+    pointsForOneDefect?: number | null;
+    pointsForOneCoop?: number | null;
   }
 
   export interface GameState {
