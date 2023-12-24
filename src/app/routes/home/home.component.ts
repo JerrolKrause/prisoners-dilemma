@@ -1,7 +1,7 @@
 import { Models } from '$shared';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { alwaysCoops } from './shared/utils/always-coops.player';
 import { alwaysDefects } from './shared/utils/always-defects.player';
 import { titForTat } from './shared/utils/tit-for-tat.player';
@@ -32,6 +32,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   });
 
   public gameState$ = new BehaviorSubject(initialGameState);
+  public _scoring$ = new BehaviorSubject<Models.Scoring | null>(null);
+  public scoring$ = this._scoring$.pipe(
+    map(scores => {
+      if (!scores) {
+        return null;
+      }
+      return Object.entries(scores)
+        .map(score => ({
+          label: score[0],
+          finalScore: score[1].finalScore,
+          opponents: Object.entries(score[1].games).map(opponent => ({
+            label: opponent[0],
+            myScore: opponent[1].myScore,
+            opponentScore: opponent[1].opponentScore,
+          })),
+        }))
+        .sort((a, b) => b.finalScore - a.finalScore);
+    }),
+  );
 
   public players: Models.Player[] = [
     {
@@ -75,6 +94,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
+    this.scoring$.subscribe(x => console.log(x));
     // Run all players against all other players
     this.startGame();
 
@@ -158,6 +178,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       }
       console.warn(scoring);
+      this._scoring$.next(scoring);
       // console.log(this.playerScore);
     }
     console.timeEnd('Time Elapsed');
