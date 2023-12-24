@@ -1,6 +1,8 @@
 import { Models } from '$shared';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
+import { alwaysCoops } from './shared/utils/always-coops.player';
 import { alwaysDefects } from './shared/utils/always-defects.player';
 import { defectEveryThree } from './shared/utils/defect-every-three.player';
 import { random } from './shared/utils/random.player';
@@ -8,7 +10,7 @@ import { titForTat } from './shared/utils/tit-for-tat.player';
 
 const initialGameState: Models.GameState = {
   round: 0,
-  playerHistory: [[], []],
+  playerHistory: [],
   score: [0, 0],
 };
 
@@ -20,6 +22,11 @@ const initialGameState: Models.GameState = {
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public strategy = Models.Strategy;
+
+  public settingsForm = this.fb.group({
+    gamesCount: [1],
+    roundsPerGame: [200],
+  });
 
   public gameState$ = new BehaviorSubject(initialGameState);
 
@@ -36,12 +43,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       playerName: 'Defect Every Three',
       fn: defectEveryThree,
     },
-    /**
     {
       playerName: 'Always Coops',
       fn: alwaysCoops,
     },
-     */
     {
       playerName: 'Always Defects',
       fn: alwaysDefects,
@@ -55,12 +60,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public results: any[] = [];
 
-  constructor() {}
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
     // Run all players against all other players
     this.startGame();
 
+    /**
     // Run 2 specific players
     const finalScore = [0, 0];
     const player1 = this.players[0];
@@ -71,6 +77,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       finalScore[1] += temp.score[1];
     }
     console.log('Face Off:', player1.playerName + ' vs ' + player2.playerName, finalScore);
+     */
   }
 
   /**

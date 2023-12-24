@@ -1,5 +1,18 @@
 <app-masterpage>
   <div class="container-fluid" *ngIf="gameState$ | async as gameState">
+    <div class="settings">
+      <form [formGroup]="settingsForm">
+        <p>
+          # Of Games<br />
+          <input class="p-input" formControlName="gamesCount" />
+        </p>
+        <p>
+          Rounds Per Game<br />
+          <input class="p-input" formControlName="roundsPerGame" />
+        </p>
+      </form>
+    </div>
+    <hr />
     <button class="btn" (click)="startGame()">Run Game</button>
     <div class="results">
       <div class="playerA">

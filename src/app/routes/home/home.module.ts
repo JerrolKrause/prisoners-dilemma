@@ -6,10 +6,11 @@ import { NgModule } from '@angular/core';
 import { routing } from './home.routes';
 
 // Components
+import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home.component';
 
 @NgModule({
-  imports: [CommonModule, SharedModule, routing, MasterPageModule, IconsComponent],
+  imports: [CommonModule, SharedModule, routing, MasterPageModule, IconsComponent, ReactiveFormsModule],
   declarations: [HomeComponent],
   providers: [],
   exports: [],
