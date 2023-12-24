@@ -25,6 +25,13 @@ export module Models {
     pointsForBothDefect?: number | null;
     pointsForOneDefect?: number | null;
     pointsForOneCoop?: number | null;
+    strategySelection: any;
+  }
+
+  export interface StrategySelection {
+    enabled: boolean;
+    count: number;
+    name?: string; // Optional, to keep track of which strategy this is
   }
 
   export interface GameState {

@@ -1,8 +1,29 @@
 <app-masterpage>
-  <div class="container-fluid" *ngIf="gameState$ | async as gameState">
+  <div class="container-fluid">
+    <h1>Prisoner's Dilemma</h1>
     <div class="settings">
       <form [formGroup]="settingsForm">
         <div class="row">
+          <div class="col col-12 col-md-4">
+            <p><strong>Strategies</strong></p>
+            <div formArrayName="strategySelection">
+              <div
+                class="d-flex"
+                style="min-height: 2rem; align-content: flex-start; flex-wrap: wrap"
+                *ngFor="let strategyGroup of strategySelection.controls; let i = index"
+                [formGroupName]="i"
+              >
+                <!-- Checkbox with Label -->
+                <label class="me-2" style="min-width: 200px">
+                  <p-checkbox formControlName="enabled" [binary]="true"></p-checkbox>
+                  {{ strategies[i].playerName }}
+                </label>
+
+                <!-- Number Input, only shown when checkbox is enabled -->
+                <input type="number" style="width: 50px" pInputText formControlName="count" *ngIf="strategyGroup.get('enabled')?.value" />
+              </div>
+            </div>
+          </div>
           <div class="col col-12 col-md-4">
             <p>
               # Of Games<br />

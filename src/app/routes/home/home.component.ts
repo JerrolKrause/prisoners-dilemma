@@ -1,6 +1,6 @@
 import { Models } from '$shared';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { BehaviorSubject, map } from 'rxjs';
 import { alwaysCoops } from './shared/utils/always-coops.player';
 import { alwaysDefects } from './shared/utils/always-defects.player';
@@ -21,7 +21,9 @@ const initialGameState: Models.GameState = {
 export class HomeComponent implements OnInit, OnDestroy {
   public strategy = Models.Strategy;
 
-  public settingsForm = this.fb.group<Models.Settings>({
+  public settingsForm!: FormGroup;
+  /**
+   *  = this.fb.group<Models.Settings>({
     gamesCount: 1,
     roundsPerGame: 200,
     // Points
@@ -30,6 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     pointsForOneDefect: 5,
     pointsForOneCoop: 0,
   });
+   */
 
   public gameState$ = new BehaviorSubject(initialGameState);
   public _scoring$ = new BehaviorSubject<Models.Scoring | null>(null);
@@ -52,7 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }),
   );
 
-  public players: Models.Player[] = [
+  public strategies: Models.Player[] = [
     {
       playerName: 'Tit For Tat',
       fn: titForTat,
@@ -75,7 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       fn: defectEveryThree,
     }, */
     {
-      playerName: 'Always Coops',
+      playerName: 'Always Cooperates',
       fn: alwaysCoops,
     },
     {
@@ -84,32 +87,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     },
   ];
 
-  public playerScore = this.players.reduce((acc, player) => {
+  public strategiesModel = this.strategies.map(s => {
+    return [true, 1];
+  });
+
+  public playerScore = this.strategies.reduce((acc, player) => {
     acc[player.playerName] = 0;
     return acc;
   }, {} as Record<string, number>);
 
   public results: any[] = [];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+    this.initializeForm();
+  }
 
   ngOnInit() {
-    this.scoring$.subscribe(x => console.log(x));
     // Run all players against all other players
     this.startGame();
-
-    /**
-    // Run 2 specific players
-    const finalScore = [0, 0];
-    const player1 = this.players[0];
-    const player2 = this.players[3];
-    for (let index = 0; index < 1; index++) {
-      const temp = this.faceOff(player1, player2);
-      finalScore[0] += temp.score[0];
-      finalScore[1] += temp.score[1];
-    }
-    console.log('Face Off:', player1.playerName + ' vs ' + player2.playerName, finalScore);
-     */
   }
 
   /**
@@ -118,8 +113,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   public startGame() {
     console.time('Time Elapsed');
     const settings: Models.Settings = this.settingsForm.value;
+
+    const strategies = this.generateSelectedStrategiesArray();
+    console.log('strategies', strategies);
     // Generate final scoring entity
-    const scoring = this.players.reduce((score, player) => {
+    const scoring = strategies.reduce((score, player) => {
       return {
         ...score,
         [player.playerName]: {
@@ -130,10 +128,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, {} as Models.Scoring);
     // console.warn(scoring, settings);
     for (let gamesCount = 0; gamesCount < (settings.gamesCount ?? 1); gamesCount++) {
-      for (let player1Index = 0; player1Index < this.players.length; player1Index++) {
-        for (let player2Index = player1Index; player2Index < this.players.length; player2Index++) {
-          const player1 = this.players[player1Index];
-          const player2 = this.players[player2Index];
+      for (let player1Index = 0; player1Index < strategies.length; player1Index++) {
+        for (let player2Index = player1Index; player2Index < strategies.length; player2Index++) {
+          const player1 = strategies[player1Index];
+          const player2 = strategies[player2Index];
           // No other players after the first player
           if (!player2) {
             break;
@@ -234,6 +232,45 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.gameState$.next(gameState);
 
     return gameState;
+  }
+
+  private initializeForm(): void {
+    this.settingsForm = this.fb.group<Models.Settings>({
+      gamesCount: 1,
+      roundsPerGame: 200,
+      pointsForBothCoop: 3,
+      pointsForBothDefect: 1,
+      pointsForOneDefect: 5,
+      pointsForOneCoop: 0,
+      strategySelection: this.fb.array(this.strategies.map(strategy => this.createStrategyFormGroup(strategy))),
+    });
+  }
+
+  private createStrategyFormGroup(strategy: Models.Player): FormGroup {
+    return this.fb.group({
+      enabled: true,
+      count: 1,
+      name: strategy.playerName, // Optional, to keep track of which strategy this is
+    });
+  }
+
+  private generateSelectedStrategiesArray(): Models.Player[] {
+    const strategySelections: Models.StrategySelection[] = this.settingsForm.get('strategySelection')?.value;
+    let selectedStrategies: Models.Player[] = [];
+
+    strategySelections.forEach((selection, index) => {
+      if (selection.enabled && selection.count > 0) {
+        for (let i = 0; i < selection.count; i++) {
+          selectedStrategies.push(this.strategies[index]);
+        }
+      }
+    });
+
+    return selectedStrategies;
+  }
+
+  get strategySelection(): FormArray {
+    return this.settingsForm.get('strategySelection') as FormArray;
   }
 
   ngOnDestroy() {}

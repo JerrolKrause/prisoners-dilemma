@@ -6,13 +6,14 @@ import { NgModule } from '@angular/core';
 import { routing } from './home.routes';
 
 import { AccordionModule } from 'primeng/accordion';
+import { CheckboxModule } from 'primeng/checkbox';
 
 // Components
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home.component';
 
 @NgModule({
-  imports: [CommonModule, SharedModule, routing, MasterPageModule, IconsComponent, ReactiveFormsModule, AccordionModule],
+  imports: [CommonModule, SharedModule, routing, MasterPageModule, IconsComponent, ReactiveFormsModule, FormsModule, AccordionModule, CheckboxModule],
   declarations: [HomeComponent],
   providers: [],
   exports: [],
