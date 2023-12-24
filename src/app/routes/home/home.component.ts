@@ -4,8 +4,6 @@ import { FormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { alwaysCoops } from './shared/utils/always-coops.player';
 import { alwaysDefects } from './shared/utils/always-defects.player';
-import { defectEveryThree } from './shared/utils/defect-every-three.player';
-import { random } from './shared/utils/random.player';
 import { titForTat } from './shared/utils/tit-for-tat.player';
 
 const initialGameState: Models.GameState = {
@@ -40,14 +38,23 @@ export class HomeComponent implements OnInit, OnDestroy {
       playerName: 'Tit For Tat',
       fn: titForTat,
     },
+    /**
     {
-      playerName: 'Random',
-      fn: random,
+      playerName: 'Random 50% Defect',
+      fn: random50,
+    },
+    {
+      playerName: 'Random 33% Defect',
+      fn: random33,
+    },
+    {
+      playerName: 'Random 66% Defect',
+      fn: random66,
     },
     {
       playerName: 'Defect Every Three',
       fn: defectEveryThree,
-    },
+    }, */
     {
       playerName: 'Always Coops',
       fn: alwaysCoops,
@@ -89,24 +96,71 @@ export class HomeComponent implements OnInit, OnDestroy {
    *
    */
   public startGame() {
+    console.time('Time Elapsed');
     const settings: Models.Settings = this.settingsForm.value;
-    console.warn(settings);
-    for (let index = 0; index < this.players.length; index++) {
-      for (let index2 = index; index2 < this.players.length; index2++) {
-        const currentPlayer = this.players[index];
-        const nextPlayer = this.players[index2];
-        if (!nextPlayer) {
-          break;
+    // Generate final scoring entity
+    const scoring = this.players.reduce((score, player) => {
+      return {
+        ...score,
+        [player.playerName]: {
+          finalScore: 0,
+          games: {},
+        },
+      };
+    }, {} as Models.Scoring);
+    // console.warn(scoring, settings);
+    for (let gamesCount = 0; gamesCount < (settings.gamesCount ?? 1); gamesCount++) {
+      for (let player1Index = 0; player1Index < this.players.length; player1Index++) {
+        for (let player2Index = player1Index; player2Index < this.players.length; player2Index++) {
+          const player1 = this.players[player1Index];
+          const player2 = this.players[player2Index];
+          // No other players after the first player
+          if (!player2) {
+            break;
+          }
+
+          // Get results
+          const results = this.faceOff(player1, player2, settings);
+          // Tally results into final entity
+          // Add opponent into player 1 games entity
+          if (!scoring[player1.playerName].games[player2.playerName]) {
+            scoring[player1.playerName].games[player2.playerName] = {
+              opponent: player2.playerName,
+              myScore: 0,
+              opponentScore: 0,
+            };
+          }
+          // Add opponent into player 2 games entity
+          if (!scoring[player2.playerName].games[player1.playerName]) {
+            scoring[player2.playerName].games[player1.playerName] = {
+              opponent: player1.playerName,
+              myScore: 0,
+              opponentScore: 0,
+            };
+          }
+
+          // Player 1 results
+          scoring[player1.playerName].finalScore += results.score[0];
+          scoring[player1.playerName].games[player2.playerName].myScore += results.score[0];
+          scoring[player1.playerName].games[player2.playerName].opponentScore += results.score[1];
+
+          // Player 2 results
+          // Prevent double counting score when a player is playing against itself
+          if (player1.playerName !== player2.playerName) {
+            scoring[player2.playerName].finalScore += results.score[1];
+            scoring[player2.playerName].games[player1.playerName].myScore += results.score[0];
+            scoring[player2.playerName].games[player1.playerName].opponentScore += results.score[1];
+          }
+
+          console.log(player1.playerName, 'vs', player2.playerName, ' | Score: ', results.score);
+          // this.playerScore[player1.playerName] += results.score[0];
+          // this.playerScore[player2.playerName] += results.score[1];
         }
-
-        const results = this.faceOff(currentPlayer, nextPlayer, settings);
-
-        console.log(currentPlayer.playerName, 'vs', nextPlayer.playerName, ' | Score: ', results.score);
-        this.playerScore[currentPlayer.playerName] += results.score[0];
-        this.playerScore[nextPlayer.playerName] += results.score[1];
       }
+      console.warn(scoring);
+      // console.log(this.playerScore);
     }
-    console.log(this.playerScore);
+    console.timeEnd('Time Elapsed');
   }
 
   /**

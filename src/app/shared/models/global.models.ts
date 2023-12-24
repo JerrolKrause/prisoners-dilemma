@@ -17,15 +17,6 @@ export module Models {
     fn: (gameState: Models.GameState, opponentNum: number) => Strategy;
   }
 
-  export interface Scoring {
-    players: {
-      [index: string]: {
-        gamesWon: number;
-        finalScore: number;
-      };
-    };
-  }
-
   export interface Settings {
     gamesCount?: number | null;
     roundsPerGame?: number | null;
@@ -40,6 +31,19 @@ export module Models {
     round: number;
     playerHistory: Strategy[][];
     score: number[];
+  }
+
+  export interface Scoring {
+    [index: string]: {
+      finalScore: number;
+      games: {
+        [index: string]: {
+          opponent: string;
+          myScore: number;
+          opponentScore: number;
+        };
+      };
+    };
   }
 
   export interface Auth {
