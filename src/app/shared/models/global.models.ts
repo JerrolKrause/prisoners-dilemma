@@ -43,6 +43,8 @@ export module Models {
   export interface Scoring {
     [index: string]: {
       finalScore: number;
+      currentPlayerIndex: number;
+      numOfPlayers: number;
       games: {
         [index: string]: {
           opponent: string;

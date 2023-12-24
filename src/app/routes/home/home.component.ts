@@ -113,15 +113,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   public startGame() {
     console.time('Time Elapsed');
     const settings: Models.Settings = this.settingsForm.value;
-
+    // Create an array with the strategy selection from the form
     const strategies = this.generateSelectedStrategiesArray();
-    console.log('strategies', strategies);
+
     // Generate final scoring entity
     const scoring = strategies.reduce((score, player) => {
       return {
         ...score,
         [player.playerName]: {
           finalScore: 0,
+          currentPlayerIndex: 0,
+          numOfPlayers: score[player.playerName]?.numOfPlayers ? score[player.playerName].numOfPlayers + 1 : 1,
           games: {},
         },
       };
@@ -170,7 +172,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             scoring[player2.playerName].games[player1.playerName].opponentScore += results.score[1];
           }
 
-          console.log(player1.playerName, 'vs', player2.playerName, ' | Score: ', results.score);
+          // console.log(player1.playerName, 'vs', player2.playerName, ' | Score: ', results.score);
           // this.playerScore[player1.playerName] += results.score[0];
           // this.playerScore[player2.playerName] += results.score[1];
         }
