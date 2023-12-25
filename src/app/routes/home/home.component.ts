@@ -158,11 +158,17 @@ export class HomeComponent implements OnInit, OnDestroy {
               opponentScore: 0,
             };
           }
-
           // Player 1 results
-          scoring[player1.playerName].finalScore += results.score[0];
-          scoring[player1.playerName].games[player2.playerName].myScore += results.score[0];
-          scoring[player1.playerName].games[player2.playerName].opponentScore += results.score[1];
+          console.log(player1.playerName, scoring[player1.playerName]);
+          if (scoring[player1.playerName].numOfPlayers > 1) {
+            scoring[player1.playerName].finalScore += results.score[0];
+            scoring[player1.playerName].games[player2.playerName].myScore += results.score[0];
+            scoring[player1.playerName].games[player2.playerName].opponentScore += results.score[1];
+          } else {
+            scoring[player1.playerName].finalScore += results.score[0];
+            scoring[player1.playerName].games[player2.playerName].myScore += results.score[0];
+            scoring[player1.playerName].games[player2.playerName].opponentScore += results.score[1];
+          }
 
           // Player 2 results
           // Prevent double counting score when a player is playing against itself
@@ -171,16 +177,11 @@ export class HomeComponent implements OnInit, OnDestroy {
             scoring[player2.playerName].games[player1.playerName].myScore += results.score[0];
             scoring[player2.playerName].games[player1.playerName].opponentScore += results.score[1];
           }
-
-          // console.log(player1.playerName, 'vs', player2.playerName, ' | Score: ', results.score);
-          // this.playerScore[player1.playerName] += results.score[0];
-          // this.playerScore[player2.playerName] += results.score[1];
         }
       }
-      console.warn(scoring);
-      this._scoring$.next(scoring);
-      // console.log(this.playerScore);
     }
+    console.warn(scoring);
+    this._scoring$.next(scoring);
     console.timeEnd('Time Elapsed');
   }
 

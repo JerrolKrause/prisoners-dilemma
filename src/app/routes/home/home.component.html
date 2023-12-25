@@ -61,18 +61,13 @@
       <p-accordion [multiple]="true">
         @for (score of scoring; track $index) {
         <p-accordionTab>
-          <ng-template pTemplate="header"> {{ score.label }} ({{ score.finalScore }}) </ng-template>
+          <ng-template pTemplate="header"> {{ score.label }} ({{ score.finalScore | number }}) </ng-template>
 
           <div>
             <table class="table table-sm table-striped mb-0" style="width: initial">
               <tbody>
                 @for (game of score.opponents; track $index) {
                 <tr>
-                  <!--
-                  <td width="200px">{{ score.label }}</td>
-                  <td width="50px">{{ game.opponentScore }}</td>
-                  <td width="50px">vs</td>
-                  -->
                   <td width="200px">{{ game.label }}</td>
                   <td width="50px">{{ game.myScore }}</td>
                   <td width="50px">{{ game.opponentScore }}</td>
