@@ -28,6 +28,8 @@ export module Models {
     strategySelection: any;
     /** Each strategy will play against a copy of itself */
     playAgainstSelf: boolean;
+    /** Randomly flip values this % of time */
+    noise: number;
   }
 
   export interface StrategySelection {

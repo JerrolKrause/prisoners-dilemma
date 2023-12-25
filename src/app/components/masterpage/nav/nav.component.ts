@@ -24,6 +24,7 @@ export class NavComponent implements OnInit, OnDestroy {
   public user$ = this.appStorage.user$;
 
   public navMenu: MainMenuItem[] = [
+    /**
     {
       label: 'Home',
       icon: 'home',
@@ -36,6 +37,7 @@ export class NavComponent implements OnInit, OnDestroy {
       routerLink: '/users',
       routerLinkActiveOptions: { exact: true },
     },
+     */
   ];
 
   public utilityMenu: MainMenuItem[] = [

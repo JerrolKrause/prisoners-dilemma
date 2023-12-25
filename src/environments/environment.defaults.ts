@@ -4,12 +4,12 @@ import { EnvironmentConfig } from './environment.model';
  * Global defaults for environment configs
  */
 export const environment: EnvironmentConfig = {
-  appID: 'angular-starter',
+  appID: 'pd',
   /** Use production bundling */
   production: false,
   properties: {
     /** Name of application */
-    appName: 'Angular Starter',
+    appName: "Prisoner's Dilemma",
   },
   settings: {
     /** Enable service worker functionality */

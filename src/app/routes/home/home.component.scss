@@ -1,8 +1,12 @@
 :host {
   display: block;
 }
-.results {
+::ng-deep {
+  .p-inputtext {
+    padding: 0.1rem 0.429rem;
+  }
 }
+
 .strategy {
   width: 10px;
   height: 10px;

@@ -7,7 +7,7 @@
       } <span [innerHtml]="nav.label"></span>
     </a>
     }
-    <div class="menu-container align-self-center ms-auto" #temp>
+    <div class="menu-container align-self-center ms-auto d-none" #temp>
       <a label="Show" class="menu-bar-toggle">
         <app-icons icon="user" class="me-2"></app-icons> @if (user$ | async; as user) {
         <span class="me-2">{{ user.name }}</span>

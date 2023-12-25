@@ -218,6 +218,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       pointsForOneDefect: 5,
       pointsForOneCoop: 0,
       playAgainstSelf: true,
+      noise: 0,
       strategySelection: this.fb.array(this.strategies.map(strategy => this.createStrategyFormGroup(strategy))),
     });
   }

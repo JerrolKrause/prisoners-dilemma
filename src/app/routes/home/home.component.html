@@ -1,6 +1,8 @@
 <app-masterpage>
   <div class="container-fluid">
+    <div class="float-end"><button pButton (click)="startGame()">Run Game</button></div>
     <h1>Prisoner's Dilemma</h1>
+    <hr />
     <div class="settings">
       <form [formGroup]="settingsForm">
         <div class="row">
@@ -36,35 +38,40 @@
             <p><strong>Game Settings</strong></p>
             <p>
               # Of Games<br />
-              <input type="number" class="p-input" formControlName="gamesCount" />
+              <input pInputText type="number" class="p-input" formControlName="gamesCount" />
             </p>
             <p>
               Rounds Per Game<br />
-              <input type="number" class="p-input" formControlName="roundsPerGame" />
+              <input pInputText type="number" class="p-input" formControlName="roundsPerGame" />
+            </p>
+            <p>
+              Noise<br />
+              <input pInputText type="number" class="p-input" formControlName="noise" />%<br />
+              <small><em>Randomly flip values this % of time</em></small>
             </p>
           </div>
           <div class="col col-12 col-md-4">
             <p><strong>Scoring</strong></p>
             <p>
               Score for mutual cooperation<br />
-              <input type="number" class="p-input" formControlName="pointsForBothCoop" />
+              <input pInputText type="number" class="p-input" formControlName="pointsForBothCoop" />
             </p>
             <p>
               Score for mutual defection<br />
-              <input type="number" class="p-input" formControlName="pointsForBothDefect" />
+              <input pInputText type="number" class="p-input" formControlName="pointsForBothDefect" />
             </p>
             <div class="mb-3">
               Scores for single defection<br />
               <div class="d-inline-block" style="min-width: 100px">Defector:</div>
-              <input type="number" class="p-input" formControlName="pointsForOneDefect" /><br />
-              <div class="d-inline-block" style="min-width: 100px">Coop:</div>
-              <input type="number" class="p-input" formControlName="pointsForOneCoop" /><br />
+              <input pInputText type="number" class="p-input" formControlName="pointsForOneDefect" class="mb-2" /><br />
+              <div class="d-inline-block" style="min-width: 100px">Cooperator:</div>
+              <input pInputText type="number" class="p-input" formControlName="pointsForOneCoop" /><br />
             </div>
           </div>
         </div>
       </form>
     </div>
-    <button class="btn" (click)="startGame()">Run Game</button>
+
     <hr />
     <div class="scoring" *ngIf="scoring$ | async as scoring">
       <h2>Scoring</h2>
