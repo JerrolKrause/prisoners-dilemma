@@ -1,124 +1,77 @@
-# Angular Starter
+# Prisoner's Dilemma Simulation
 
-A rapid starter project for creating Angular single page apps. Contains Angular, ngPrime, Akita and more. Built with Angular CLI.
+Prisoner's Dilemma is a standard example of a game analyzed in game theory that shows why two completely rational individuals might not cooperate, even if it appears that it is in their best interest to do so. This application simulates the Prisoner's Dilemma, allowing users to select various strategies, run multiple games, and observe the outcomes in terms of points scored according to chosen strategies.
 
-## Quick Start
+View Online @ https://jerrolkrause.github.io/prisoners-dilemma/
 
-```bash
-# Open a terminal/command and navigate to the directory where the starter is needed
+## Features
 
-# Clone the latest
-git clone https://github.com/ntersol/angular-starter.git
+### Strategies
 
-# Rename the directory
-ren angular-starter MY_APP_NAME
+Users can select from a variety of strategies for the simulation:
 
-# Navigate into the newly renamed directory
-cd MY_APP_NAME
+- **Tit For Tat**: Begins by cooperating and then replicates the opponent's previous action.
+- **Always Defects**: Defects in every round, regardless of the opponent's action.
+- **Always Cooperates**: Cooperates in every round, regardless of the opponent's action.
+- **Unforgiving**: Cooperates until the opponent defects; after that, it always defects.
 
-# Install the repo with npm
-npm i
+Each strategy can be enabled or disabled and assigned a specific count to indicate how many players will use that strategy during the simulation.
 
-# Start the app
-ng serve
-```
+### Game Settings
 
-## Usage
+Configure the simulation with the following game settings:
 
-```bash
-# Serve dev on http://localhost:4200/
-ng serve
+- **Number of Games**: The total number of games to be played in the simulation.
+- **Rounds Per Game**: The number of rounds to be played in each game.
+- **Noise**: The percentage chance of a strategy's action being flipped randomly. This introduces uncertainty into the simulation to simulate imperfect decision-making.
 
-# Serve dev on http://localhost:4200/ with hot module reloading
-npm run start
+Additionally, there is an option to have each strategy play against itself as well as against other strategies.
 
-# Prod Build for targeted environment. Files will appear in the dist folder
-npm run build:qa # Uses settings from environment.qa.ts
-npm run build:uat # Uses settings from environment.uat.ts
-npm run build:prod # Uses settings from environment.prod.ts
+### Scoring
 
-# Serve prod build from dist folder at http://127.0.0.1:8080/#/.
-# Requires http server which can be installed with `npm install http-server -g`
-npm run prod
+The scoring section allows users to define how points are distributed in the game:
 
-# Run prettier which will format the code in the entire project. It is better to use the prettier extension which formats on save.
-npm run format
+- **Score for Mutual Cooperation**: Points awarded when both players cooperate.
+- **Score for Mutual Defection**: Points awarded when both players defect.
+- **Scores for Single Defection**: Points awarded to the defector and the cooperator when one defects and the other cooperates.
 
-# Run prod build and then use webpack bundle analyzer to check bundle sizes and composition
-# Documentation located in /documentation/
-npm run build:stats
+### Simulation Results
 
-# Automatically generate documentation
-npm run docs
+The simulation results are displayed below the settings, where each strategy's performance is listed along with the points scored in the format:
 
-# Run e2e protractor tests
-ng e2e
+- **Strategy Name**: The number of points scored by cooperating and defecting.
 
-# Run e2e protractor tests without rebuilding every time (faster)
-ng e2e --s false
+## Running the Simulation
 
-# Update NPM dependencies via Angular CLI
-ng update
+To initiate the simulation, simply configure your strategies and game settings, and click the "Run Game" button. The results will be displayed, allowing for analysis and comparison of different strategies.
 
-# Deploy dist folder to git pages. Be sure to update deploy script in package.json
-npm run deploy
+---
 
-# Deploy dist folder to git pages with prerendered pages
-1. Add "baseHref": "/angular-starter/", to angular.json in projects>angular-starter>architect>build>options
-2. Run "npm run deploy:ssr"
-3. Remove update from #1. Prerender does not (yet) support the --base-href prop in the build command
+## Installation
 
-# Angular Universal/SSR Commands
-npm run ssr:dev # Run SSR locally for development purposes
-npm run ssr:build # Create an SSR prod build
-npm run ssr:serve # Serve SSR prod build with express. This is the command needed to run on the server.
+To run this application:
 
-```
+1. Clone the repository to your local machine.
+2. Ensure you have [Node.js](https://nodejs.org/) installed.
+3. Navigate to the project directory and run `npm install` to install dependencies.
+4. Start the application by running `npm start`.
 
-## Localizing Your App
+## Contributing
 
-`package.json`
+Contributions to this project are welcome. Please follow these steps to contribute:
 
-- If using github pages, update the `npm run deploy` command in this file to include the correct slug. IE replace `/angular-starter/` with your url
+1. Fork the repository.
+2. Create a new branch for your feature.
+3. Commit your changes with clear and concise commit messages.
+4. Push your changes to the branch.
+5. Create a pull request explaining your changes.
 
-`src > environments > defaults.ts` +
-`src > environments > environment.prod.ts`
+## License
 
-- Localize environment settings and properties in these files. Enable/disable app functionality as needed
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-`src > app > shared > app.settings.ts`
+---
 
-- Add/change global app & environment variables
+For any questions or suggestions regarding the application, please open an issue in the GitHub repository.
 
-`src > index.html`
-
-- Update any header changes to the html in this file. IE logo, navigation, etc
-
-`src > manifest.json`
-
-- Change the site info in this file to be specific to your app. Make sure the start Url property matches your production URL
-
-`src > assets > icons`
-
-- Change these icons to ones for your app
-
-`src >` `apple-touch-icon` + `favicon.ico` + `safari-pinned-tab.svg`
-
-- Change these icons to ones for your app
-
-`src > ngsw-config.json`
-
-- Update any dependencies needed for the service worker. Use asset groups for site resources & use dataGroups for API calls
-
-## Useful Tools
-
-### VSCode Tools
-
-- Prettier: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
-- ESLint: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
-
-## Useful Info
-
-Lazy load libraries. Normally libraries that are shared between lazy loaded routes are all bundled into a single master bundle. This approach will bundle them separately.
-
-See https://github.com/ntersol/angular-starter/blob/main/src/app/components/components.lazy.ts for how to lazy load both internal components/modules and 3rd party libraries.
+Enjoy simulating the Prisoner's Dilemma and may the best strategy win!
