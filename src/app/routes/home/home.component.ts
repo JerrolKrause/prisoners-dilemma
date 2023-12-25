@@ -5,6 +5,7 @@ import { BehaviorSubject, map } from 'rxjs';
 import { alwaysCoops } from './shared/utils/always-coops.player';
 import { alwaysDefects } from './shared/utils/always-defects.player';
 import { titForTat } from './shared/utils/tit-for-tat.player';
+import { unforgiving } from './shared/utils/unforgiving.player';
 
 const initialGameState: Models.GameState = {
   round: 0,
@@ -19,7 +20,7 @@ const initialGameState: Models.GameState = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  public strategy = Models.Strategy;
+  // public decision = Models.Decision;
 
   public settingsForm!: FormGroup;
   /**
@@ -55,44 +56,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }),
   );
 
-  public strategies: Models.Player[] = [
-    {
-      playerName: 'Tit For Tat',
-      fn: titForTat,
-    },
-    /**
-    {
-      playerName: 'Random 50% Defect',
-      fn: random50,
-    },
-    {
-      playerName: 'Random 33% Defect',
-      fn: random33,
-    },
-    {
-      playerName: 'Random 66% Defect',
-      fn: random66,
-    },
-    {
-      playerName: 'Defect Every Three',
-      fn: defectEveryThree,
-    }, */
-    {
-      playerName: 'Always Cooperates',
-      fn: alwaysCoops,
-    },
-    {
-      playerName: 'Always Defects',
-      fn: alwaysDefects,
-    },
-  ];
+  public strategies: Models.Strategy[] = [titForTat, alwaysDefects, alwaysCoops, unforgiving];
 
   public strategiesModel = this.strategies.map(s => {
     return [true, 1];
   });
 
   public playerScore = this.strategies.reduce((acc, player) => {
-    acc[player.playerName] = 0;
+    acc[player.name] = 0;
     return acc;
   }, {} as Record<string, number>);
 
@@ -120,10 +91,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     const scoring = strategies.reduce((score, player) => {
       return {
         ...score,
-        [player.playerName]: {
+        [player.name]: {
           finalScore: 0,
           currentPlayerIndex: 0,
-          numOfPlayers: score[player.playerName]?.numOfPlayers ? score[player.playerName].numOfPlayers + 1 : 1,
+          numOfPlayers: score[player.name]?.numOfPlayers ? score[player.name].numOfPlayers + 1 : 1,
           games: {},
         },
       };
@@ -143,39 +114,39 @@ export class HomeComponent implements OnInit, OnDestroy {
           const results = this.faceOff(player1, player2, settings);
           // Tally results into final entity
           // Add opponent into player 1 games entity
-          if (!scoring[player1.playerName].games[player2.playerName]) {
-            scoring[player1.playerName].games[player2.playerName] = {
-              opponent: player2.playerName,
+          if (!scoring[player1.name].games[player2.name]) {
+            scoring[player1.name].games[player2.name] = {
+              opponent: player2.name,
               myScore: 0,
               opponentScore: 0,
             };
           }
           // Add opponent into player 2 games entity
-          if (!scoring[player2.playerName].games[player1.playerName]) {
-            scoring[player2.playerName].games[player1.playerName] = {
-              opponent: player1.playerName,
+          if (!scoring[player2.name].games[player1.name]) {
+            scoring[player2.name].games[player1.name] = {
+              opponent: player1.name,
               myScore: 0,
               opponentScore: 0,
             };
           }
           // Player 1 results
-          console.log(player1.playerName, scoring[player1.playerName]);
-          if (scoring[player1.playerName].numOfPlayers > 1) {
-            scoring[player1.playerName].finalScore += results.score[0];
-            scoring[player1.playerName].games[player2.playerName].myScore += results.score[0];
-            scoring[player1.playerName].games[player2.playerName].opponentScore += results.score[1];
+          console.log(player1.name, scoring[player1.name]);
+          if (scoring[player1.name].numOfPlayers > 1) {
+            scoring[player1.name].finalScore += results.score[0];
+            scoring[player1.name].games[player2.name].myScore += results.score[0];
+            scoring[player1.name].games[player2.name].opponentScore += results.score[1];
           } else {
-            scoring[player1.playerName].finalScore += results.score[0];
-            scoring[player1.playerName].games[player2.playerName].myScore += results.score[0];
-            scoring[player1.playerName].games[player2.playerName].opponentScore += results.score[1];
+            scoring[player1.name].finalScore += results.score[0];
+            scoring[player1.name].games[player2.name].myScore += results.score[0];
+            scoring[player1.name].games[player2.name].opponentScore += results.score[1];
           }
 
           // Player 2 results
           // Prevent double counting score when a player is playing against itself
-          if (player1.playerName !== player2.playerName) {
-            scoring[player2.playerName].finalScore += results.score[1];
-            scoring[player2.playerName].games[player1.playerName].myScore += results.score[0];
-            scoring[player2.playerName].games[player1.playerName].opponentScore += results.score[1];
+          if (player1.name !== player2.name) {
+            scoring[player2.name].finalScore += results.score[1];
+            scoring[player2.name].games[player1.name].myScore += results.score[0];
+            scoring[player2.name].games[player1.name].opponentScore += results.score[1];
           }
         }
       }
@@ -191,7 +162,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param player2
    * @returns
    */
-  public faceOff(player1: Models.Player, player2: Models.Player, settings: Models.Settings) {
+  public faceOff(player1: Models.Strategy, player2: Models.Strategy, settings: Models.Settings) {
     const gameState: Models.GameState = {
       round: 0,
       playerHistory: [[], []],
@@ -204,22 +175,22 @@ export class HomeComponent implements OnInit, OnDestroy {
       const playerBDecision = player2.fn(gameState, 0);
 
       // Scoring
-      if (playerADecision === Models.Strategy.coop && playerBDecision === Models.Strategy.coop) {
+      if (playerADecision === Models.Decision.coop && playerBDecision === Models.Decision.coop) {
         // Both players cooperate
         gameState.score[0] += settings.pointsForBothCoop ?? 3;
         gameState.score[1] += settings.pointsForBothCoop ?? 3;
         result.push(['Both Coop', ...gameState.score]);
-      } else if (playerADecision === Models.Strategy.defect && playerBDecision === Models.Strategy.defect) {
+      } else if (playerADecision === Models.Decision.defect && playerBDecision === Models.Decision.defect) {
         // Both players defect
         gameState.score[0] += settings.pointsForBothDefect ?? 1;
         gameState.score[1] += settings.pointsForBothDefect ?? 1;
         result.push(['Both Defect', ...gameState.score]);
-      } else if (playerADecision === Models.Strategy.coop && playerBDecision === Models.Strategy.defect) {
+      } else if (playerADecision === Models.Decision.coop && playerBDecision === Models.Decision.defect) {
         // Player A coops, Player B defects
         gameState.score[0] += settings.pointsForOneCoop ?? 0;
         gameState.score[1] += settings.pointsForOneDefect ?? 5;
         result.push(['Player 1 Coops, Player 2 Defects', ...gameState.score]);
-      } else if (playerADecision === Models.Strategy.defect && playerBDecision === Models.Strategy.coop) {
+      } else if (playerADecision === Models.Decision.defect && playerBDecision === Models.Decision.coop) {
         // Player A defects, Player B coops
         gameState.score[0] += settings.pointsForOneDefect ?? 5;
         gameState.score[1] += settings.pointsForOneCoop ?? 0;
@@ -240,7 +211,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private initializeForm(): void {
     this.settingsForm = this.fb.group<Models.Settings>({
       gamesCount: 1,
-      roundsPerGame: 200,
+      roundsPerGame: 20,
       pointsForBothCoop: 3,
       pointsForBothDefect: 1,
       pointsForOneDefect: 5,
@@ -249,17 +220,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  private createStrategyFormGroup(strategy: Models.Player): FormGroup {
+  private createStrategyFormGroup(strategy: Models.Strategy): FormGroup {
     return this.fb.group({
       enabled: true,
       count: 1,
-      name: strategy.playerName, // Optional, to keep track of which strategy this is
+      name: strategy.name, // Optional, to keep track of which strategy this is
     });
   }
 
-  private generateSelectedStrategiesArray(): Models.Player[] {
+  private generateSelectedStrategiesArray(): Models.Strategy[] {
     const strategySelections: Models.StrategySelection[] = this.settingsForm.get('strategySelection')?.value;
-    let selectedStrategies: Models.Player[] = [];
+    let selectedStrategies: Models.Strategy[] = [];
 
     strategySelections.forEach((selection, index) => {
       if (selection.enabled && selection.count > 0) {

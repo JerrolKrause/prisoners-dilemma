@@ -1,5 +1,6 @@
 import { Models } from '$shared';
 
-export const alwaysDefects = (gameState: Models.GameState, opponentNum: number): Models.Strategy => {
-  return Models.Strategy.defect;
+export const alwaysDefects: Models.Strategy = {
+  name: 'Always Defects',
+  fn: (gameState: Models.GameState, opponentNum: number): Models.Decision => Models.Decision.defect,
 };

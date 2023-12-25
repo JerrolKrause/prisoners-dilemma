@@ -7,14 +7,14 @@
  *
  */
 export module Models {
-  export enum Strategy {
+  export enum Decision {
     defect,
     coop,
   }
 
-  export interface Player {
-    playerName: string;
-    fn: (gameState: Models.GameState, opponentNum: number) => Strategy;
+  export interface Strategy {
+    name: string;
+    fn: (gameState: Models.GameState, opponentNum: number) => Decision;
   }
 
   export interface Settings {
@@ -36,7 +36,7 @@ export module Models {
 
   export interface GameState {
     round: number;
-    playerHistory: Strategy[][];
+    playerHistory: Decision[][];
     score: number[];
   }
 

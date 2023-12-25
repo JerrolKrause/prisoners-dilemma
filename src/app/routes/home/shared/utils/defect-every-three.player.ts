@@ -1,8 +1,8 @@
 import { Models } from '$shared';
 
-export const defectEveryThree = (gameState: Models.GameState, opponentNum: number): Models.Strategy => {
+export const defectEveryThree = (gameState: Models.GameState, opponentNum: number): Models.Decision => {
   if (gameState.round % 3 === 0) {
-    return Models.Strategy.defect;
+    return Models.Decision.defect;
   }
-  return Models.Strategy.coop;
+  return Models.Decision.coop;
 };
