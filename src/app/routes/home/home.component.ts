@@ -99,10 +99,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
       };
     }, {} as Models.Scoring);
-    // console.warn(scoring, settings);
+    // console.warn(settings);
+    const player2StartingIndex = settings.playAgainstSelf ? 0 : 1;
     for (let gamesCount = 0; gamesCount < (settings.gamesCount ?? 1); gamesCount++) {
       for (let player1Index = 0; player1Index < strategies.length; player1Index++) {
-        for (let player2Index = player1Index; player2Index < strategies.length; player2Index++) {
+        for (let player2Index = player1Index + player2StartingIndex; player2Index < strategies.length; player2Index++) {
           const player1 = strategies[player1Index];
           const player2 = strategies[player2Index];
           // No other players after the first player
@@ -216,6 +217,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       pointsForBothDefect: 1,
       pointsForOneDefect: 5,
       pointsForOneCoop: 0,
+      playAgainstSelf: true,
       strategySelection: this.fb.array(this.strategies.map(strategy => this.createStrategyFormGroup(strategy))),
     });
   }

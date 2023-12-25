@@ -26,6 +26,8 @@ export module Models {
     pointsForOneDefect?: number | null;
     pointsForOneCoop?: number | null;
     strategySelection: any;
+    /** Each strategy will play against a copy of itself */
+    playAgainstSelf: boolean;
   }
 
   export interface StrategySelection {
