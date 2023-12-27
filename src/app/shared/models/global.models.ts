@@ -54,6 +54,7 @@ export module Models {
           opponent: string;
           myScore: number;
           opponentScore: number;
+          playerHistory: Decision[][];
         };
       };
     };

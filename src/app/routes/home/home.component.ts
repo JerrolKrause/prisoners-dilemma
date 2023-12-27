@@ -9,11 +9,7 @@ import { sneaky } from './shared/utils/sneaky.player';
 import { titForTat } from './shared/utils/tit-for-tat.player';
 import { unforgiving } from './shared/utils/unforgiving.player';
 
-const initialGameState: Models.GameState = {
-  round: 0,
-  playerHistory: [],
-  score: [0, 0],
-};
+const localStorageKey = 'pd-settings';
 
 @Component({
   selector: 'app-home',
@@ -37,7 +33,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   });
    */
 
-  public gameState$ = new BehaviorSubject(initialGameState);
   public _scoring$ = new BehaviorSubject<Models.Scoring | null>(null);
   public scoring$ = this._scoring$.pipe(
     map(scores => {
@@ -86,6 +81,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public startGame() {
     console.time('Time Elapsed');
     const settings: Models.Settings = this.settingsForm.value;
+    window.localStorage.setItem(localStorageKey, JSON.stringify(settings));
     // Create an array with the strategy selection from the form
     const strategies = this.generateSelectedStrategiesArray();
 
@@ -115,6 +111,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           // Get results
           const results = this.faceOff(player1, player2, settings);
+          console.log(results);
           // Tally results into final entity
           // Add opponent into player 1 games entity
           if (!scoring[player1.name].games[player2.name]) {
@@ -122,6 +119,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               opponent: player2.name,
               myScore: 0,
               opponentScore: 0,
+              playerHistory: [],
             };
           }
           // Add opponent into player 2 games entity
@@ -130,18 +128,20 @@ export class HomeComponent implements OnInit, OnDestroy {
               opponent: player1.name,
               myScore: 0,
               opponentScore: 0,
+              playerHistory: [],
             };
           }
           // Player 1 results
-          console.log(player1.name, scoring[player1.name]);
           if (scoring[player1.name].numOfPlayers > 1) {
             scoring[player1.name].finalScore += results.score[0];
             scoring[player1.name].games[player2.name].myScore += results.score[0];
             scoring[player1.name].games[player2.name].opponentScore += results.score[1];
+            scoring[player1.name].games[player2.name].playerHistory = results.playerHistory;
           } else {
             scoring[player1.name].finalScore += results.score[0];
             scoring[player1.name].games[player2.name].myScore += results.score[0];
             scoring[player1.name].games[player2.name].opponentScore += results.score[1];
+            scoring[player1.name].games[player2.name].playerHistory = results.playerHistory;
           }
 
           // Player 2 results
@@ -150,11 +150,12 @@ export class HomeComponent implements OnInit, OnDestroy {
             scoring[player2.name].finalScore += results.score[1];
             scoring[player2.name].games[player1.name].myScore += results.score[0];
             scoring[player2.name].games[player1.name].opponentScore += results.score[1];
+            scoring[player2.name].games[player1.name].playerHistory = [results.playerHistory[1], results.playerHistory[0]];
           }
         }
       }
     }
-    console.warn(scoring);
+    console.warn('Scoring', scoring);
     this._scoring$.next(scoring);
     console.timeEnd('Time Elapsed');
   }
@@ -171,12 +172,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       playerHistory: [[], []],
       score: [0, 0],
     };
-    const result = [];
 
     for (let index = 0; index < (settings.roundsPerGame ?? 200); index++) {
       let playerADecision = player1.fn(gameState, 1);
       let playerBDecision = player2.fn(gameState, 0);
-      // Add support for noise, IE random results based on the percentage specifieed by the user
+      // Add support for noise, IE random results based on the percentage specified by the user
       // Support for noise in player A's decision
       if (Math.random() < settings.noise / 100) {
         playerADecision = playerADecision === Models.Decision.coop ? Models.Decision.defect : Models.Decision.coop;
@@ -192,31 +192,26 @@ export class HomeComponent implements OnInit, OnDestroy {
         // Both players cooperate
         gameState.score[0] += settings.pointsForBothCoop ?? 3;
         gameState.score[1] += settings.pointsForBothCoop ?? 3;
-        result.push(['Both Coop', ...gameState.score]);
       } else if (playerADecision === Models.Decision.defect && playerBDecision === Models.Decision.defect) {
         // Both players defect
         gameState.score[0] += settings.pointsForBothDefect ?? 1;
         gameState.score[1] += settings.pointsForBothDefect ?? 1;
-        result.push(['Both Defect', ...gameState.score]);
       } else if (playerADecision === Models.Decision.coop && playerBDecision === Models.Decision.defect) {
         // Player A coops, Player B defects
         gameState.score[0] += settings.pointsForOneCoop ?? 0;
         gameState.score[1] += settings.pointsForOneDefect ?? 5;
-        result.push(['Player 1 Coops, Player 2 Defects', ...gameState.score]);
       } else if (playerADecision === Models.Decision.defect && playerBDecision === Models.Decision.coop) {
         // Player A defects, Player B coops
         gameState.score[0] += settings.pointsForOneDefect ?? 5;
         gameState.score[1] += settings.pointsForOneCoop ?? 0;
-        result.push(['Player 1 Defects, Player 2 Coops', ...gameState.score]);
       } else {
-        console.error('Unknown condition');
+        console.error('Unknown condition', playerADecision, playerBDecision);
       }
 
       gameState.round++;
       gameState.playerHistory[0].push(playerADecision);
       gameState.playerHistory[1].push(playerBDecision);
     }
-    this.gameState$.next(gameState);
 
     return gameState;
   }
@@ -233,6 +228,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       noise: 0,
       strategySelection: this.fb.array(this.strategies.map(strategy => this.createStrategyFormGroup(strategy))),
     });
+    const settingsStr = window.localStorage.getItem(localStorageKey);
+    if (settingsStr) {
+      try {
+        const settings = JSON.parse(settingsStr) as Models.Settings;
+        this.settingsForm.patchValue(settings);
+      } catch (err) {
+        console.error('Unable to get value from localstorage');
+      }
+    }
   }
 
   private createStrategyFormGroup(strategy: Models.Strategy): FormGroup {
