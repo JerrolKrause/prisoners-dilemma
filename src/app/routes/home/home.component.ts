@@ -4,6 +4,8 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { BehaviorSubject, map } from 'rxjs';
 import { alwaysCoops } from './shared/utils/always-coops.player';
 import { alwaysDefects } from './shared/utils/always-defects.player';
+import { random } from './shared/utils/random.player';
+import { sneaky } from './shared/utils/sneaky.player';
 import { titForTat } from './shared/utils/tit-for-tat.player';
 import { unforgiving } from './shared/utils/unforgiving.player';
 
@@ -56,7 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }),
   );
 
-  public strategies: Models.Strategy[] = [titForTat, alwaysDefects, alwaysCoops, unforgiving];
+  public strategies: Models.Strategy[] = [titForTat, alwaysDefects, alwaysCoops, unforgiving, sneaky, random];
 
   public strategiesModel = this.strategies.map(s => {
     return [true, 1];
@@ -172,8 +174,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     const result = [];
 
     for (let index = 0; index < (settings.roundsPerGame ?? 200); index++) {
-      const playerADecision = player1.fn(gameState, 1);
-      const playerBDecision = player2.fn(gameState, 0);
+      let playerADecision = player1.fn(gameState, 1);
+      let playerBDecision = player2.fn(gameState, 0);
+      // Add support for noise, IE random results based on the percentage specifieed by the user
+      // Support for noise in player A's decision
+      if (Math.random() < settings.noise / 100) {
+        playerADecision = playerADecision === Models.Decision.coop ? Models.Decision.defect : Models.Decision.coop;
+      }
+
+      // Support for noise in player B's decision
+      if (Math.random() < settings.noise / 100) {
+        playerBDecision = playerBDecision === Models.Decision.coop ? Models.Decision.defect : Models.Decision.coop;
+      }
 
       // Scoring
       if (playerADecision === Models.Decision.coop && playerBDecision === Models.Decision.coop) {
@@ -212,7 +224,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private initializeForm(): void {
     this.settingsForm = this.fb.group<Models.Settings>({
       gamesCount: 1,
-      roundsPerGame: 20,
+      roundsPerGame: 200,
       pointsForBothCoop: 3,
       pointsForBothDefect: 1,
       pointsForOneDefect: 5,
