@@ -75,19 +75,43 @@
     <hr />
     <div class="scoring" *ngIf="scoring$ | async as scoring">
       <h2>Scoring</h2>
-      <p-accordion [multiple]="true">
+      <p-accordion [activeIndex]="[0]" [multiple]="true">
         @for (score of scoring; track $index) {
         <p-accordionTab>
           <ng-template pTemplate="header"> {{ score.label }} ({{ score.finalScore | number }}) </ng-template>
 
           <div>
-            <table class="table table-sm table-striped mb-0" style="width: initial">
+            <table class="table table-sm table-striped mb-0">
               <tbody>
                 @for (game of score.opponents; track $index) {
                 <tr>
                   <td width="200px">{{ game.label }}</td>
                   <td width="50px">{{ game.myScore }}</td>
                   <td width="50px">{{ game.opponentScore }}</td>
+                  <td>
+                    <div style="display: flex; flex-direction: column">
+                      <div class="strategies me">
+                        @for (round of game.playerHistory[0]; track $index) {
+                        <div
+                          class="strategy"
+                          [ngClass]="{
+                            defect: round === decision.defect
+                          }"
+                        ></div>
+                        }
+                      </div>
+                      <div class="strategies opponent">
+                        @for (round of game.playerHistory[1]; track $index) {
+                        <div
+                          class="strategy"
+                          [ngClass]="{
+                            defect: round === decision.defect
+                          }"
+                        ></div>
+                        }
+                      </div>
+                    </div>
+                  </td>
                 </tr>
                 }
               </tbody>

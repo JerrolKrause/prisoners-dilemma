@@ -6,7 +6,7 @@ import { alwaysCoops } from './shared/utils/always-coops.player';
 import { alwaysDefects } from './shared/utils/always-defects.player';
 import { random } from './shared/utils/random.player';
 import { sneaky } from './shared/utils/sneaky.player';
-import { titForTat } from './shared/utils/tit-for-tat.player';
+import { titForTat, titForTatForgiving } from './shared/utils/tit-for-tat.player';
 import { unforgiving } from './shared/utils/unforgiving.player';
 
 const localStorageKey = 'pd-settings';
@@ -18,20 +18,9 @@ const localStorageKey = 'pd-settings';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  // public decision = Models.Decision;
+  public decision = Models.Decision;
 
   public settingsForm!: FormGroup;
-  /**
-   *  = this.fb.group<Models.Settings>({
-    gamesCount: 1,
-    roundsPerGame: 200,
-    // Points
-    pointsForBothCoop: 3,
-    pointsForBothDefect: 1,
-    pointsForOneDefect: 5,
-    pointsForOneCoop: 0,
-  });
-   */
 
   public _scoring$ = new BehaviorSubject<Models.Scoring | null>(null);
   public scoring$ = this._scoring$.pipe(
@@ -39,6 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!scores) {
         return null;
       }
+
       return Object.entries(scores)
         .map(score => ({
           label: score[0],
@@ -47,13 +37,14 @@ export class HomeComponent implements OnInit, OnDestroy {
             label: opponent[0],
             myScore: opponent[1].myScore,
             opponentScore: opponent[1].opponentScore,
+            playerHistory: opponent[1].playerHistory,
           })),
         }))
         .sort((a, b) => b.finalScore - a.finalScore);
     }),
   );
 
-  public strategies: Models.Strategy[] = [titForTat, alwaysDefects, alwaysCoops, unforgiving, sneaky, random];
+  public strategies: Models.Strategy[] = [titForTat, titForTatForgiving, alwaysDefects, alwaysCoops, unforgiving, sneaky, random];
 
   public strategiesModel = this.strategies.map(s => {
     return [true, 1];
@@ -97,7 +88,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
       };
     }, {} as Models.Scoring);
-    // console.warn(settings);
     const player2StartingIndex = settings.playAgainstSelf ? 0 : 1;
     for (let gamesCount = 0; gamesCount < (settings.gamesCount ?? 1); gamesCount++) {
       for (let player1Index = 0; player1Index < strategies.length; player1Index++) {
@@ -111,7 +101,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           // Get results
           const results = this.faceOff(player1, player2, settings);
-          console.log(results);
           // Tally results into final entity
           // Add opponent into player 1 games entity
           if (!scoring[player1.name].games[player2.name]) {
@@ -234,7 +223,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         const settings = JSON.parse(settingsStr) as Models.Settings;
         this.settingsForm.patchValue(settings);
       } catch (err) {
-        console.error('Unable to get value from localstorage');
+        console.error('Unable to get value from localstorage', err);
       }
     }
   }

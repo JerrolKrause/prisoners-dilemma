@@ -5,14 +5,26 @@
   .p-inputtext {
     padding: 0.1rem 0.429rem;
   }
+  .p-accordion-tab-active .p-accordion-header-link {
+    color: #fff;
+    text-decoration: none;
+  }
 }
 
-.strategy {
-  width: 10px;
-  height: 10px;
+.strategies {
   display: inline-block;
-  background: green;
-  &.defect {
-    background: red;
+  height: 12px;
+  overflow: hidden;
+  line-height: 12px;
+  .strategy {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    background: green;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    &.defect {
+      background: red;
+    }
   }
 }
