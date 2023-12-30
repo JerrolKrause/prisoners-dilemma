@@ -85,30 +85,30 @@
               <tbody>
                 @for (game of score.opponents; track $index) {
                 <tr>
-                  <td width="200px">{{ game.label }}</td>
-                  <td width="50px">{{ game.myScore }}</td>
+                  <td class="highlight" width="200px">{{ game.label }}</td>
+                  <td class="highlight" width="50px">{{ game.myScore }}</td>
                   <td width="50px">{{ game.opponentScore }}</td>
                   <td>
                     <div style="display: flex; flex-direction: column">
                       <div class="strategies me">
-                        @for (round of game.playerHistory[0]; track $index) {
+                        @for (round of game.playerHistory[0]; track $index) { @if($index < 100){
                         <div
                           class="strategy"
                           [ngClass]="{
                             defect: round === decision.defect
                           }"
                         ></div>
-                        }
+                        } }
                       </div>
                       <div class="strategies opponent">
-                        @for (round of game.playerHistory[1]; track $index) {
+                        @for (round of game.playerHistory[1]; track $index) { @if($index < 100){
                         <div
                           class="strategy"
                           [ngClass]="{
                             defect: round === decision.defect
                           }"
                         ></div>
-                        }
+                        } }
                       </div>
                     </div>
                   </td>

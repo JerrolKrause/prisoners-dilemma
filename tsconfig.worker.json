@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "extends": "./tsconfig.json",
+    "target": "ES2022",
+    "module": "es2020",
+    "lib": ["es2020", "dom"],
+    "typeRoots": ["node_modules/@types"],
+    "moduleResolution": "node",
+    "outDir": "./dist/browser/assets/workers",
+    "strict": true, // optional, but recommended for type safety
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "paths": {
+      "$components": ["./src/app/components"],
+      "$shared": ["./src/app/shared"],
+      "$env": ["./src/environments/environment.ts"]
+    }
+  },
+  "include": ["workers/prisoners-dilemma.worker.ts"],
+  "exclude": ["node_modules", "src", "src/**/*"]
+}

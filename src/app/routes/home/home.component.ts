@@ -64,6 +64,44 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Run all players against all other players
     this.startGame();
+    this.startGame2();
+  }
+
+  public startGame2() {
+    const settings: Models.Settings = this.settingsForm.value;
+    window.localStorage.setItem(localStorageKey, JSON.stringify(settings));
+    // Create an array with the strategy selection from the form
+    const strategies = this.generateSelectedStrategiesArray();
+
+    if (window.Worker) {
+      // Create a new web worker
+      // src\assets\workers\prisoners-dilemma.worker.js
+      const myWorker = new Worker('/assets/workers/prisoners-dilemma.worker.js');
+
+      // Send data to the web worker
+      myWorker.postMessage(
+        JSON.stringify({
+          strategies: strategies,
+          settings: settings,
+        }),
+      );
+
+      /**
+
+       */
+
+      // Event listener for messages from the web worker
+      myWorker.onmessage = function (e) {
+        console.log('Message received from worker:', e.data);
+      };
+
+      // Listen for errors from the web worker
+      myWorker.onerror = function (e) {
+        console.error('Error from worker:', e);
+      };
+    } else {
+      console.log("Your browser doesn't support web workers.");
+    }
   }
 
   /**
