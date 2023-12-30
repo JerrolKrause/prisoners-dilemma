@@ -13,6 +13,12 @@
 .highlight {
   background: rgba(0, 0, 0, 0.1);
 }
+.scores {
+  color: red;
+  &.winner {
+    color: green;
+  }
+}
 
 .strategies {
   display: inline-block;

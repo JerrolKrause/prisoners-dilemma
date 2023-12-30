@@ -55,6 +55,7 @@ export module Models {
           myScore: number;
           opponentScore: number;
           playerHistory: Decision[][];
+          spread: number;
         };
       };
     };

@@ -88,6 +88,15 @@
                   <td class="highlight" width="200px">{{ game.label }}</td>
                   <td class="highlight" width="50px">{{ game.myScore }}</td>
                   <td width="50px">{{ game.opponentScore }}</td>
+                  <td
+                    width="50px"
+                    class="scores"
+                    [ngClass]="{
+                      winner: game.spread >= 0
+                    }"
+                  >
+                    {{ game.spread }}
+                  </td>
                   <td>
                     <div style="display: flex; flex-direction: column">
                       <div class="strategies me">

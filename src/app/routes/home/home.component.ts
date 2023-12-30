@@ -1,7 +1,7 @@
 import { Models } from '$shared';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 import { alwaysCoops } from './shared/utils/always-coops.player';
 import { alwaysDefects } from './shared/utils/always-defects.player';
 import { random } from './shared/utils/random.player';
@@ -33,15 +33,21 @@ export class HomeComponent implements OnInit, OnDestroy {
         .map(score => ({
           label: score[0],
           finalScore: score[1].finalScore,
-          opponents: Object.entries(score[1].games).map(opponent => ({
-            label: opponent[0],
-            myScore: opponent[1].myScore,
-            opponentScore: opponent[1].opponentScore,
-            playerHistory: opponent[1].playerHistory,
-          })),
+          opponents: Object.entries(score[1].games)
+            .map(opponent => {
+              return {
+                label: opponent[0],
+                myScore: opponent[1].myScore,
+                opponentScore: opponent[1].opponentScore,
+                playerHistory: opponent[1].playerHistory,
+                spread: opponent[1].spread,
+              };
+            })
+            .sort((a, b) => b.spread - a.spread),
         }))
         .sort((a, b) => b.finalScore - a.finalScore);
     }),
+    tap(x => console.warn(x)),
   );
 
   public strategies: Models.Strategy[] = [titForTat, titForTatForgiving, alwaysDefects, alwaysCoops, unforgiving, sneaky, random];
@@ -71,8 +77,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     const settings: Models.Settings = this.settingsForm.value;
     window.localStorage.setItem(localStorageKey, JSON.stringify(settings));
     // Create an array with the strategy selection from the form
-    const strategies = this.generateSelectedStrategiesArray();
+    // const strategies = this.generateSelectedStrategiesArray();
 
+    /**
     if (window.Worker) {
       // Create a new web worker
       // src\assets\workers\prisoners-dilemma.worker.js
@@ -86,10 +93,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         }),
       );
 
-      /**
-
-       */
-
       // Event listener for messages from the web worker
       myWorker.onmessage = function (e) {
         console.log('Message received from worker:', e.data);
@@ -102,6 +105,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       console.log("Your browser doesn't support web workers.");
     }
+     */
   }
 
   /**
@@ -147,6 +151,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               myScore: 0,
               opponentScore: 0,
               playerHistory: [],
+              spread: 0,
             };
           }
           // Add opponent into player 2 games entity
@@ -156,21 +161,18 @@ export class HomeComponent implements OnInit, OnDestroy {
               myScore: 0,
               opponentScore: 0,
               playerHistory: [],
+              spread: 0,
             };
           }
           // Player 1 results
-          if (scoring[player1.name].numOfPlayers > 1) {
-            scoring[player1.name].finalScore += results.score[0];
-            scoring[player1.name].games[player2.name].myScore += results.score[0];
-            scoring[player1.name].games[player2.name].opponentScore += results.score[1];
-            scoring[player1.name].games[player2.name].playerHistory = results.playerHistory;
-          } else {
-            scoring[player1.name].finalScore += results.score[0];
-            scoring[player1.name].games[player2.name].myScore += results.score[0];
-            scoring[player1.name].games[player2.name].opponentScore += results.score[1];
-            scoring[player1.name].games[player2.name].playerHistory = results.playerHistory;
-          }
-
+          // TODO: Score each player separately?
+          console.log(results);
+          scoring[player1.name].finalScore += results.score[0];
+          scoring[player1.name].games[player2.name].myScore += results.score[0];
+          scoring[player1.name].games[player2.name].opponentScore += results.score[1];
+          scoring[player1.name].games[player2.name].playerHistory = results.playerHistory;
+          scoring[player1.name].games[player2.name].spread =
+            scoring[player1.name].games[player2.name].myScore - scoring[player1.name].games[player2.name].opponentScore;
           // Player 2 results
           // Prevent double counting score when a player is playing against itself
           if (player1.name !== player2.name) {
@@ -178,11 +180,13 @@ export class HomeComponent implements OnInit, OnDestroy {
             scoring[player2.name].games[player1.name].myScore += results.score[0];
             scoring[player2.name].games[player1.name].opponentScore += results.score[1];
             scoring[player2.name].games[player1.name].playerHistory = [results.playerHistory[1], results.playerHistory[0]];
+            scoring[player2.name].games[player1.name].spread =
+              scoring[player2.name].games[player1.name].opponentScore - scoring[player2.name].games[player1.name].myScore;
           }
         }
       }
     }
-    console.warn('Scoring', scoring);
+    // console.warn('Scoring', scoring);
     this._scoring$.next(scoring);
     console.timeEnd('Time Elapsed');
   }
