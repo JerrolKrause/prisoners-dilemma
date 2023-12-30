@@ -166,7 +166,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
           // Player 1 results
           // TODO: Score each player separately?
-          console.log(results);
           scoring[player1.name].finalScore += results.score[0];
           scoring[player1.name].games[player2.name].myScore += results.score[0];
           scoring[player1.name].games[player2.name].opponentScore += results.score[1];
