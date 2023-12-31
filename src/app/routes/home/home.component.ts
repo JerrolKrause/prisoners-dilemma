@@ -203,7 +203,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       score: [0, 0],
     };
 
-    for (let index = 0; index < (settings.roundsPerGame ?? 200); index++) {
+    // Include any random rounds
+    const roundsPerGame = (settings.roundsPerGame ?? 0) + this.getRandomNumber(0, settings.randomRounds ?? 0);
+
+    for (let index = 0; index < (roundsPerGame ?? 200); index++) {
       let playerADecision = player1.fn(gameState, 1);
       let playerBDecision = player2.fn(gameState, 0);
       // Add support for noise, IE random results based on the percentage specified by the user
@@ -250,6 +253,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.settingsForm = this.fb.group<Models.Settings>({
       gamesCount: 1,
       roundsPerGame: 200,
+      randomRounds: 10,
       pointsForBothCoop: 3,
       pointsForBothDefect: 1,
       pointsForOneDefect: 5,
@@ -294,6 +298,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   get strategySelection(): FormArray {
     return this.settingsForm.get('strategySelection') as FormArray;
+  }
+
+  public getRandomNumber(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   ngOnDestroy() {}

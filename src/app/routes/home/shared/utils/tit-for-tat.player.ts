@@ -2,6 +2,7 @@ import { Models } from '$shared';
 
 export const titForTat: Models.Strategy = {
   name: 'Tit For Tat',
+  description: "This strategy starts with cooperation and then mimics the opponent's previous move in subsequent rounds.",
   fn: (gameState: Models.GameState, opponentNum: number): Models.Decision => {
     if (gameState.round === 0) {
       return Models.Decision.coop;
@@ -17,6 +18,7 @@ export const titForTat: Models.Strategy = {
 
 export const titForTwoTat: Models.Strategy = {
   name: 'Tit For Two Tats',
+  description: '',
   fn: (gameState: Models.GameState, opponentNum: number): Models.Decision => {
     if (gameState.round === 0) {
       return Models.Decision.coop;
@@ -32,6 +34,8 @@ export const titForTwoTat: Models.Strategy = {
 
 export const titForTatForgiving: Models.Strategy = {
   name: 'Tit For Tat Forgiving',
+  description:
+    "Similar to Tit For Tat, this strategy cooperates initially and then usually copies the opponent's last move but occasionally forgives defection and cooperates instead.",
   fn: (gameState: Models.GameState, opponentNum: number): Models.Decision => {
     if (gameState.round === 0) {
       return Models.Decision.coop;

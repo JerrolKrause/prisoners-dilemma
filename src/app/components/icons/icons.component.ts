@@ -15,6 +15,7 @@ import {
   faPlus,
   faPowerOff,
   faQuestion,
+  faQuestionCircle,
   faRefresh,
   faSpinner,
   faTrash,
@@ -40,6 +41,7 @@ export type AvailableIcons =
   | 'bars'
   | 'home'
   | 'cubes'
+  | 'pi-question-circle'
   | 'question'
   | 'x';
 
@@ -59,6 +61,7 @@ export class IconsComponent implements OnInit {
     phone: faPhone,
     envelope: faEnvelope,
     'power-off': faPowerOff,
+    'pi-question-circle': faQuestionCircle,
     spinner: faSpinner,
     refresh: faRefresh,
     plus: faPlus,

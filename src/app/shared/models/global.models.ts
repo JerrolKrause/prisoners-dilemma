@@ -14,12 +14,14 @@ export module Models {
 
   export interface Strategy {
     name: string;
+    description: string;
     fn: (gameState: Models.GameState, opponentNum: number) => Decision;
   }
 
   export interface Settings {
     gamesCount?: number | null;
     roundsPerGame?: number | null;
+    randomRounds?: number | null;
     // Points
     pointsForBothCoop?: number | null;
     pointsForBothDefect?: number | null;

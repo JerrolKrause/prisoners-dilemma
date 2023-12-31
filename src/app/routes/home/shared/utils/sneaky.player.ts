@@ -5,6 +5,7 @@ import { Models } from '$shared';
 
 export const sneaky: Models.Strategy = {
   name: 'Sneaky',
+  description: 'Similar to Tit For Tat but will randomly defect 10% of the time',
   fn: (gameState: Models.GameState, opponentNum: number): Models.Decision => {
     if (gameState.round === 0) {
       return Models.Decision.coop;

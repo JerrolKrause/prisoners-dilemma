@@ -6,7 +6,7 @@
     <div class="settings mb-3">
       <form [formGroup]="settingsForm">
         <div class="row">
-          <div class="col col-12 col-md-4">
+          <div class="col col-12 col-md-4 mb-3">
             <div class="card">
               <div class="card-header">
                 <strong>Strategies</strong>
@@ -22,7 +22,7 @@
                     <!-- Checkbox with Label -->
                     <label class="me-2" style="min-width: 200px">
                       <p-checkbox formControlName="enabled" [binary]="true"></p-checkbox>
-                      {{ strategies[i].name }}
+                      {{ strategies[i].name }} <app-icons class="icon" icon="pi-question-circle" [title]="strategies[i].description"></app-icons>
                     </label>
 
                     <!-- Number Input, only shown when checkbox is enabled -->
@@ -41,7 +41,7 @@
               </div>
             </div>
           </div>
-          <div class="col col-12 col-md-4">
+          <div class="col col-12 col-md-4 mb-3">
             <div class="card">
               <div class="card-header">
                 <strong>Game Settings</strong>
@@ -49,21 +49,25 @@
               <div class="p-3">
                 <p>
                   # Of Games<br />
-                  <input pInputText type="number" class="p-input" formControlName="gamesCount" />
+                  <input pInputText type="number" class="p-input w-100" formControlName="gamesCount" />
                 </p>
                 <p>
-                  Rounds Per Game<br />
-                  <input pInputText type="number" class="p-input" formControlName="roundsPerGame" />
+                  Rounds per game<br />
+                  <input pInputText type="number" class="p-input w-100" formControlName="roundsPerGame" />
+                </p>
+                <p>
+                  Add up to this many random rounds<br />
+                  <input pInputText type="number" class="p-input w-100" formControlName="randomRounds" />
                 </p>
                 <p>
                   Noise<br />
                   <input pInputText type="number" class="p-input" formControlName="noise" />%<br />
-                  <small><em>Randomly flip values this % of time</em></small>
+                  <small><em>Randomly flip results this % of time</em></small>
                 </p>
               </div>
             </div>
           </div>
-          <div class="col col-12 col-md-4">
+          <div class="col col-12 col-md-4 mb-3">
             <div class="card">
               <div class="card-header">
                 <strong>Scoring</strong>
@@ -71,11 +75,11 @@
               <div class="p-3">
                 <p>
                   Score for mutual cooperation<br />
-                  <input pInputText type="number" class="p-input" formControlName="pointsForBothCoop" />
+                  <input pInputText type="number" class="p-input w-100" formControlName="pointsForBothCoop" />
                 </p>
                 <p>
                   Score for mutual defection<br />
-                  <input pInputText type="number" class="p-input" formControlName="pointsForBothDefect" />
+                  <input pInputText type="number" class="p-input w-100" formControlName="pointsForBothDefect" />
                 </p>
                 <div class="mb-3">
                   Scores for single defection<br />

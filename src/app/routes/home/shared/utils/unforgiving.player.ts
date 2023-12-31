@@ -2,6 +2,7 @@ import { Models } from '$shared';
 
 export const unforgiving: Models.Strategy = {
   name: 'Unforgiving',
+  description: `Starts by cooperating but switches to defecting permanently after the first time the opponent defects.`,
   fn: (gameState: Models.GameState, opponentNum: number): Models.Decision => {
     // Attempts to cooperate at first round
     if (gameState.round === 0) {
