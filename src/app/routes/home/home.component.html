@@ -94,11 +94,11 @@
     <div class="text-end"><button pButton (click)="startGame()">Run Game</button></div>
     <div class="scoring" *ngIf="scoring$ | async as scoring">
       <h2>Scoring</h2>
-      <p-accordion [activeIndex]="[0]" [multiple]="true">
+      <p-accordion [multiple]="true" (activeIndexChange)="activeIndexChange($event)" *ngIf="accordionsOpen$ | async as accordionsOpen">
         @for (score of scoring; track $index) {
         <p-accordionTab>
           <ng-template pTemplate="header"> {{ score.label }} ({{ score.finalScore | number }}) </ng-template>
-
+          @defer (when accordionsOpen[$index]) {
           <div>
             <table class="table table-sm table-striped mb-0">
               <tbody>
@@ -145,6 +145,7 @@
               </tbody>
             </table>
           </div>
+          }
         </p-accordionTab>
         }
       </p-accordion>

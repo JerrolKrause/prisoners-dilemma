@@ -22,6 +22,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public settingsForm!: FormGroup;
 
+  public accordionsOpen$ = new BehaviorSubject<Record<string, boolean>>({});
+
   public _scoring$ = new BehaviorSubject<Models.Scoring | null>(null);
   public scoring$ = this._scoring$.pipe(
     map(scores => {
@@ -294,6 +296,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     return selectedStrategies;
+  }
+
+  public activeIndexChange(indexes: number | number[]) {
+    const numbersArray = Array.isArray(indexes) ? indexes : [indexes];
+    this.accordionsOpen$.next(
+      numbersArray.reduce((obj, number) => {
+        obj[String(number)] = true;
+        return obj;
+      }, {} as Record<string, boolean>),
+    );
   }
 
   get strategySelection(): FormArray {
