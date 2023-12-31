@@ -11,9 +11,12 @@ View Online @ https://jerrolkrause.github.io/prisoners-dilemma/
 Users can select from a variety of strategies for the simulation:
 
 - **Tit For Tat**: Begins by cooperating and then replicates the opponent's previous action.
+- **Tit For Tat Forgiving**: Similar to Tit For Tat, this strategy cooperates initially and then usually copies the opponent's last move but occasionally forgives defection and cooperates instead.
 - **Always Defects**: Defects in every round, regardless of the opponent's action.
 - **Always Cooperates**: Cooperates in every round, regardless of the opponent's action.
 - **Unforgiving**: Cooperates until the opponent defects; after that, it always defects.
+- **Sneaky**: Similar to Tit For Tat but will randomly defect 10% of the time.
+- **Random**: Randomly defects or cooperates 50% of the time.
 
 Each strategy can be enabled or disabled and assigned a specific count to indicate how many players will use that strategy during the simulation.
 
@@ -23,6 +26,7 @@ Configure the simulation with the following game settings:
 
 - **Number of Games**: The total number of games to be played in the simulation.
 - **Rounds Per Game**: The number of rounds to be played in each game.
+- **Random Rounds**: Add up to this many random rounds.
 - **Noise**: The percentage chance of a strategy's action being flipped randomly. This introduces uncertainty into the simulation to simulate imperfect decision-making.
 
 Additionally, there is an option to have each strategy play against itself as well as against other strategies.
