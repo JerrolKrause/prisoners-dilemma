@@ -1,9 +1,6 @@
 <app-masterpage>
   <div class="container-fluid">
-    <div class="float-end"><button pButton (click)="startGame()">Run Game</button></div>
-    <h1>Prisoner's Dilemma</h1>
-    <hr />
-    <div class="settings mb-3">
+    <div class="settings">
       <form [formGroup]="settingsForm">
         <div class="row">
           <div class="col col-12 col-md-4 mb-3">
@@ -94,7 +91,7 @@
         </div>
       </form>
     </div>
-
+    <div class="text-end"><button pButton (click)="startGame()">Run Game</button></div>
     <div class="scoring" *ngIf="scoring$ | async as scoring">
       <h2>Scoring</h2>
       <p-accordion [activeIndex]="[0]" [multiple]="true">
