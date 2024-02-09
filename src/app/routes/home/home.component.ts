@@ -2,6 +2,7 @@ import { Models } from '$shared';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { BehaviorSubject, map, tap } from 'rxjs';
+import { acrid } from './shared/utils/acrid.player';
 import { alwaysCoops } from './shared/utils/always-coops.player';
 import { alwaysDefects } from './shared/utils/always-defects.player';
 import { random } from './shared/utils/random.player';
@@ -52,7 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     tap(x => console.warn(x)),
   );
 
-  public strategies: Models.Strategy[] = [titForTat, titForTatForgiving, alwaysDefects, alwaysCoops, unforgiving, sneaky, random];
+  public strategies: Models.Strategy[] = [titForTat, titForTatForgiving, alwaysDefects, alwaysCoops, unforgiving, sneaky, random, acrid];
 
   public strategiesModel = this.strategies.map(s => {
     return [true, 1];
