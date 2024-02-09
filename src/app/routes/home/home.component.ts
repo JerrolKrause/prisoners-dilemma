@@ -210,8 +210,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     const roundsPerGame = (settings.roundsPerGame ?? 0) + this.getRandomNumber(0, settings.randomRounds ?? 0);
 
     for (let index = 0; index < (roundsPerGame ?? 200); index++) {
-      let playerADecision = player1.fn(gameState, 1);
-      let playerBDecision = player2.fn(gameState, 0);
+      let playerADecision = player1.fn(gameState, 1, 0);
+      let playerBDecision = player2.fn(gameState, 0, 1);
       // Add support for noise, IE random results based on the percentage specified by the user
       // Support for noise in player A's decision
       if (Math.random() < settings.noise / 100) {

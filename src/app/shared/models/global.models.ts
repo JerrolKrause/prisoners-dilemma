@@ -15,7 +15,7 @@ export module Models {
   export interface Strategy {
     name: string;
     description: string;
-    fn: (gameState: Models.GameState, opponentNum: number) => Decision;
+    fn: (gameState: Models.GameState, opponentNum: number, myNum: number) => Decision;
   }
 
   export interface Settings {
