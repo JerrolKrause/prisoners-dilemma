@@ -40,8 +40,12 @@ export class HomeComponent implements OnInit, OnDestroy {
             .map(opponent => {
               return {
                 label: opponent[0],
+                // Roll up Scores
                 myScore: opponent[1].myScore,
                 opponentScore: opponent[1].opponentScore,
+                //  myScore: opponent[1].playerHistory[0].reduce((acc, current) => acc + current, 0),
+                // opponentScore: opponent[1].playerHistory[1].reduce((acc, current) => acc + current, 0),
+                // History
                 playerHistory: opponent[1].playerHistory,
                 spread: opponent[1].spread,
               };
@@ -143,7 +147,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           if (!player2) {
             break;
           }
-
           // Get results
           const results = this.faceOff(player1, player2, settings);
           // Tally results into final entity
@@ -167,14 +170,15 @@ export class HomeComponent implements OnInit, OnDestroy {
               spread: 0,
             };
           }
+          console.log('results', results);
           // Player 1 results
           // TODO: Score each player separately?
           scoring[player1.name].finalScore += results.score[0];
-          scoring[player1.name].games[player2.name].myScore += results.score[0];
-          scoring[player1.name].games[player2.name].opponentScore += results.score[1];
+          scoring[player1.name].games[player2.name].myScore += results.score[1];
+          scoring[player1.name].games[player2.name].opponentScore += results.score[0];
           scoring[player1.name].games[player2.name].playerHistory = results.playerHistory;
           scoring[player1.name].games[player2.name].spread =
-            scoring[player1.name].games[player2.name].myScore - scoring[player1.name].games[player2.name].opponentScore;
+            scoring[player1.name].games[player2.name].opponentScore - scoring[player1.name].games[player2.name].myScore;
           // Player 2 results
           // Prevent double counting score when a player is playing against itself
           if (player1.name !== player2.name) {

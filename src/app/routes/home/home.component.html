@@ -105,20 +105,27 @@
                 @for (game of score.opponents; track $index) {
                 <tr>
                   <td class="highlight" width="200px">{{ game.label }}</td>
-                  <td class="highlight" width="50px">{{ game.myScore }}</td>
-                  <td width="50px">{{ game.opponentScore }}</td>
+
+                  <td class="highlight last" width="50px" title="My Score">
+                    {{ game.myScore }}
+                  </td>
+                  <td width="50px" class="highlight2">Me</td>
+                  <td width="50px" class="highlight2 last" title="Opponents Score">{{ game.opponentScore }}</td>
                   <td
                     width="50px"
                     class="scores"
                     [ngClass]="{
                       winner: game.spread >= 0
                     }"
+                    title="Spread of points between these 2 strategies. Green is gain, red is loss"
                   >
-                    {{ game.spread }}
+                    @if( game.spread >= 0) { <span>+</span> }
+                    <span>{{ game.spread }}</span>
                   </td>
                   <td>
                     <div style="display: flex; flex-direction: column">
                       <div class="strategies me">
+                        <div class="strategy label">Me</div>
                         @for (round of game.playerHistory[0]; track $index) { @if($index < 100){
                         <div
                           class="strategy"
@@ -129,6 +136,7 @@
                         } }
                       </div>
                       <div class="strategies opponent">
+                        <div class="strategy label">Opponent</div>
                         @for (round of game.playerHistory[1]; track $index) { @if($index < 100){
                         <div
                           class="strategy"
